@@ -1,0 +1,2 @@
+rootProject.name='Kin Blood Demo'
+include ':app'

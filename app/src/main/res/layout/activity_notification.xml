@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Notification">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Required Blood Group" />
+
+        <RadioGroup
+            android:id="@+id/rgPositiveN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbApositiveN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="A+"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/rbBpositiveN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="B+"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/rbABpositiveN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="AB+"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/rbOpositiveN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="O+"
+                android:textSize="20sp" />
+
+
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/rgNegetiveN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbAnegetiveN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="A-"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/rbBnegetiveN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="B-"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/rbABnegetiveN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="AB-"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/rbOnegetiveN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="O-"
+                android:textSize="20sp" />
+        </RadioGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_hospital"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Hospital name" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_condition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Patient condition" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_noOfBags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="No of Bags"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_sendNotif"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="send request" />
+
+    </LinearLayout>
+
+</ScrollView>

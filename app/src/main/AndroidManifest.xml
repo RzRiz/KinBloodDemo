@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.sust.kinblooddemo">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".notification.App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".EditDonationInfo"></activity>
+        <activity android:name=".EditGender" />
+        <activity android:name=".EditBloodGroup" />
+        <activity android:name=".EditInstitute" />
+        <activity android:name=".EditOccupation" />
+        <activity android:name=".EditAddress" />
+        <activity android:name=".EditPhoneNumber" />
+        <activity android:name=".EditName" />
+        <activity android:name=".EditPassword" />
+        <activity android:name=".EditEmail" />
+        <activity android:name=".EditBirthDate" />
+        <activity android:name=".AfterDonarReg" />
+        <activity android:name=".Home" />
+        <activity android:name=".AfterNotif" />
+        <activity android:name=".Profile" />
+        <activity android:name=".PasswordReset" />
+        <activity android:name=".Header" />
+        <activity android:name=".Login" />
+
+        <service
+            android:name=".notification.MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".Notification" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".DonarRegistration" />
+        <activity android:name=".Dicision" />
+        <activity android:name=".Otp" />
+        <activity android:name=".SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

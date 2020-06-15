@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_need_donar"
+            android:title="Need a donar"
+            android:icon="@drawable/ic_home_black_24dp"
+            />
+
+        <item
+            android:id="@+id/nav_become_donar"
+            android:title="Become a donar"
+            android:icon="@drawable/ic_exposure_plus_1_black_24dp"
+            />
+
+        <item
+            android:id="@+id/nav_req_status"
+            android:title="Request Status"
+            android:icon="@drawable/ic_android_black_24dp"
+            />
+
+    </group>
+
+    <item android:title="Profile">
+
+        <menu>
+
+            <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/nav_profile"
+                    android:title="Profile"
+                    android:icon="@drawable/ic_menu_black_24dp"
+                    />
+
+                <item
+                    android:id="@+id/nav_log_out"
+                    android:title="Log Out"
+                    android:icon="@drawable/ic_android_black_24dp"/>
+
+            </group>
+
+        </menu>
+
+    </item>
+
+
+    <item android:title="miscellaneous">
+
+        <menu>
+
+            <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/nav_about"
+                    android:title="About"
+                    android:icon="@drawable/ic_android_black_24dp"
+                    />
+
+                <item
+                    android:id="@+id/nav_rate_us"
+                    android:title="Rate Us"
+                    android:icon="@drawable/ic_android_black_24dp"
+                    />
+
+            </group>
+
+        </menu>
+
+    </item>
+
+</menu>
