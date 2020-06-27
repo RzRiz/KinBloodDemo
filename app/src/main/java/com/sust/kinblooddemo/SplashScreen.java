@@ -21,13 +21,11 @@ public class SplashScreen extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (firebaseAuth.getCurrentUser() != null) {
-            Intent intent = new Intent(SplashScreen.this, Home.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            startActivity(new Intent(SplashScreen.this, Home.class));
+            finish();
         } else {
-            Intent intent = new Intent(SplashScreen.this, Login.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            startActivity(new Intent(SplashScreen.this, Login.class));
+            finish();
         }
     }
 }

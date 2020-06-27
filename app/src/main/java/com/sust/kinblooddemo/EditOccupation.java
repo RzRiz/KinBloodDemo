@@ -1,6 +1,5 @@
 package com.sust.kinblooddemo;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,9 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
@@ -33,35 +29,26 @@ public class EditOccupation extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_occupation);
         progressBar.setVisibility(View.GONE);
 
-        updateOccupation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                String occupation_ = occupation.getText().toString().trim();
-                if (occupation_.isEmpty()){
-                    finish();
-                }
-                else {
-                    Map<String, Object> occupation = new HashMap<>();
-                    occupation.put("occupation", occupation_);
-                    Profile.DOCUMENT_REFERENCE
-                            .set(occupation, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
+        updateOccupation.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
+            String occupation_ = occupation.getText().toString().trim();
+            if (occupation_.isEmpty()){
+                finish();
+            }
+            else {
+                Map<String, Object> occupation = new HashMap<>();
+                occupation.put("occupation", occupation_);
+                Home.DOCUMENT_REFERENCE
+                        .set(occupation, SetOptions.merge()).addOnSuccessListener(aVoid -> {
                             Toast.makeText(EditOccupation.this, "Occupation update successful", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(EditOccupation.this, Profile.class);
                             intent.putExtra("newOccupation", occupation_);
                             setResult(6, intent);
                             finish();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
+                        }).addOnFailureListener(e -> {
                             progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(EditOccupation.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
+                        });
             }
         });
     }

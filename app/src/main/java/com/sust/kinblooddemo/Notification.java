@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -55,71 +54,62 @@ public class Notification extends AppCompatActivity {
 
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hospital_ = hospital.getText().toString().trim();
-                if (hospital_.isEmpty()) {
-                    hospital.setError("Field cannot be empty");
-                    hospital.requestFocus();
-                    return;
-                }
-                condition_ = condition.getText().toString().trim();
-                if (condition_.isEmpty()) {
-                    condition.setError("Field cannot be empty");
-                    condition.requestFocus();
-                    return;
-                }
-                noOfBags_ = noOfBags.getText().toString().trim();
-                if (noOfBags_.isEmpty()) {
-                    noOfBags.setError("Field cannot be empty");
-                    noOfBags.requestFocus();
-                    return;
-                }
-                if (bG == 0) {
-                    Toast.makeText(Notification.this, "Please select your blood group", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                blood_group = radioButtonBg.getText().toString();
-
-
-                FirebaseDatabase.getInstance().getReference().child("Tokens").child("TzewxuRq0pYGf0ORmliUzruV8Qu1").child("token").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String usertoken = dataSnapshot.getValue(String.class);
-                        sendNotifications(usertoken, blood_group, hospital_, condition_, noOfBags_);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
+        send.setOnClickListener(v -> {
+            hospital_ = hospital.getText().toString().trim();
+            if (hospital_.isEmpty()) {
+                hospital.setError("Field cannot be empty");
+                hospital.requestFocus();
+                return;
             }
+            condition_ = condition.getText().toString().trim();
+            if (condition_.isEmpty()) {
+                condition.setError("Field cannot be empty");
+                condition.requestFocus();
+                return;
+            }
+            noOfBags_ = noOfBags.getText().toString().trim();
+            if (noOfBags_.isEmpty()) {
+                noOfBags.setError("Field cannot be empty");
+                noOfBags.requestFocus();
+                return;
+            }
+            if (bG == 0) {
+                Toast.makeText(Notification.this, "Please select your blood group", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            blood_group = radioButtonBg.getText().toString();
+
+
+            FirebaseDatabase.getInstance().getReference().child("Tokens").child("TzewxuRq0pYGf0ORmliUzruV8Qu1").child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String usertoken = dataSnapshot.getValue(String.class);
+                    sendNotifications(usertoken, blood_group, hospital_, condition_, noOfBags_);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
         });
 
-        radioGroupPositive.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                bG = 1;
-                if (checkedId != -1 && isChecking) {
-                    isChecking = false;
-                    radioGroupNegetive.clearCheck();
-                    radioButtonBg = findViewById(checkedId);
-                }
-                isChecking = true;
+        radioGroupPositive.setOnCheckedChangeListener((group, checkedId) -> {
+            bG = 1;
+            if (checkedId != -1 && isChecking) {
+                isChecking = false;
+                radioGroupNegetive.clearCheck();
+                radioButtonBg = findViewById(checkedId);
             }
+            isChecking = true;
         });
-        radioGroupNegetive.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                bG = 1;
-                if (checkedId != -1 && isChecking) {
-                    isChecking = false;
-                    radioGroupPositive.clearCheck();
-                    radioButtonBg = findViewById(checkedId);
-                }
-                isChecking = true;
+        radioGroupNegetive.setOnCheckedChangeListener((group, checkedId) -> {
+            bG = 1;
+            if (checkedId != -1 && isChecking) {
+                isChecking = false;
+                radioGroupPositive.clearCheck();
+                radioButtonBg = findViewById(checkedId);
             }
+            isChecking = true;
         });
 
         updateToken();
@@ -143,9 +133,8 @@ public class Notification extends AppCompatActivity {
                     if (response.body().success != 1) {
                         Toast.makeText(Notification.this, "Failed to send request", Toast.LENGTH_SHORT).show();
                     } else {
-                        Intent intent = new Intent(Notification.this, AfterNotif.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
+                        startActivity(new Intent(Notification.this, AfterNotif.class));
+                        finish();
                     }
                 }
             }
@@ -155,12 +144,5 @@ public class Notification extends AppCompatActivity {
 
             }
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(Notification.this, Home.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
     }
 }

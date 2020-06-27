@@ -46,10 +46,10 @@ public class EditEmail extends AppCompatActivity {
                     return;
                 }
                 EmailAuthCredential credential = (EmailAuthCredential) EmailAuthProvider.getCredential(oldEmail_, password_);
-                Profile.FIREBASE_USER.reauthenticate(credential).addOnSuccessListener(aVoid -> Profile.FIREBASE_USER.updateEmail(newEmail_).addOnSuccessListener(aVoid1 -> {
+                Home.FIREBASE_USER.reauthenticate(credential).addOnSuccessListener(aVoid -> Home.FIREBASE_USER.updateEmail(newEmail_).addOnSuccessListener(aVoid1 -> {
                     Map<String, Object> email = new HashMap<>();
                     email.put("email", newEmail_);
-                    Profile.DOCUMENT_REFERENCE
+                    Home.DOCUMENT_REFERENCE
                             .set(email, SetOptions.merge()).addOnSuccessListener(aVoid11 -> {
                                 Toast.makeText(EditEmail.this, "Email update successful", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(EditEmail.this, Profile.class);

@@ -2,12 +2,12 @@ package com.sust.kinblooddemo;
 
 public class RegistrationHelper {
     private String address, gender, bloodGroup, occupation, institute, donarstatus, donatedBefore;
-    private int bDay, bMonth, bYear, donate_times, dDay, dMonth, dYear;
+    private int bDay, bMonth, bYear, donateTimes, dDay, dMonth, dYear;
 
     public RegistrationHelper(){}
 
 
-    public RegistrationHelper(String address, String gender, String bloodGroup, String occupation, String institute, String donarstatus, int bDay, int bMonth, int bYear, int donate_times, int dDay, int dMonth, int dYear, String donatedBefore) {
+    public RegistrationHelper(String address, String gender, String bloodGroup, String occupation, String institute, String donarstatus, int bDay, int bMonth, int bYear, int donateTimes, int dDay, int dMonth, int dYear, String donatedBefore) {
         this.address = address;
         this.gender = gender;
         this.bloodGroup = bloodGroup;
@@ -17,7 +17,7 @@ public class RegistrationHelper {
         this.bDay = bDay;
         this.bMonth = bMonth;
         this.bYear = bYear;
-        this.donate_times = donate_times;
+        this.donateTimes = donateTimes;
         this.dDay = dDay;
         this.dMonth = dMonth;
         this.dYear = dYear;
@@ -96,12 +96,12 @@ public class RegistrationHelper {
         this.bYear = bYear;
     }
 
-    public int getDonate_times() {
-        return donate_times;
+    public int getDonateTimes() {
+        return donateTimes;
     }
 
-    public void setDonate_times(int donate_times) {
-        this.donate_times = donate_times;
+    public void setDonateTimes(int donateTimes) {
+        this.donateTimes = donateTimes;
     }
 
     public int getdDay() {

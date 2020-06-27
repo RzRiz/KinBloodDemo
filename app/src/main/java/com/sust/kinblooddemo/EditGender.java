@@ -1,6 +1,5 @@
 package com.sust.kinblooddemo;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,9 +10,6 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
@@ -35,37 +31,28 @@ public class EditGender extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_gender);
         progressBar.setVisibility(View.GONE);
 
-        updateGender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                int i = radioGroupGender.getCheckedRadioButtonId();
-                if (i == -1) {
-                    finish();
-                }
-                else{
-                    RadioButton radioButtonGender = findViewById(i);
-                    String gender_ = radioButtonGender.getText().toString();
-                    Map<String, Object> gender = new HashMap<>();
-                    gender.put("gender", gender_);
-                    Profile.DOCUMENT_REFERENCE
-                            .set(gender, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
+        updateGender.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
+            int i = radioGroupGender.getCheckedRadioButtonId();
+            if (i == -1) {
+                finish();
+            }
+            else{
+                RadioButton radioButtonGender = findViewById(i);
+                String gender_ = radioButtonGender.getText().toString();
+                Map<String, Object> gender = new HashMap<>();
+                gender.put("gender", gender_);
+                Home.DOCUMENT_REFERENCE
+                        .set(gender, SetOptions.merge()).addOnSuccessListener(aVoid -> {
                             Toast.makeText(EditGender.this, "Gender update successful", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(EditGender.this, Profile.class);
                             intent.putExtra("newGender", gender_);
                             setResult(10, intent);
                             finish();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
+                        }).addOnFailureListener(e -> {
                             progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(EditGender.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
+                        });
             }
         });
     }

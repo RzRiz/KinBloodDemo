@@ -1,25 +1,19 @@
 package com.sust.kinblooddemo;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -55,45 +49,36 @@ public class DonarRegistration extends AppCompatActivity implements View.OnClick
         lastDonated = findViewById(R.id.btn_ldblood);
         Button register = findViewById(R.id.btn_regester);
 
-        radioGroupPositive.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                bG = 1;
-                if (checkedId != -1 && isChecking) {
-                    isChecking = false;
-                    radioGroupNegetive.clearCheck();
-                    radioButtonBg = findViewById(checkedId);
-                }
-                isChecking = true;
+        radioGroupPositive.setOnCheckedChangeListener((group, checkedId) -> {
+            bG = 1;
+            if (checkedId != -1 && isChecking) {
+                isChecking = false;
+                radioGroupNegetive.clearCheck();
+                radioButtonBg = findViewById(checkedId);
             }
+            isChecking = true;
         });
-        radioGroupNegetive.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                bG = 1;
-                if (checkedId != -1 && isChecking) {
-                    isChecking = false;
-                    radioGroupPositive.clearCheck();
-                    radioButtonBg = findViewById(checkedId);
-                }
-                isChecking = true;
+        radioGroupNegetive.setOnCheckedChangeListener((group, checkedId) -> {
+            bG = 1;
+            if (checkedId != -1 && isChecking) {
+                isChecking = false;
+                radioGroupPositive.clearCheck();
+                radioButtonBg = findViewById(checkedId);
             }
+            isChecking = true;
         });
 
         birthDay.setOnClickListener(this);
         lastDonated.setOnClickListener(this);
         register.setOnClickListener(this);
 
-        radioGroupDonatedBefore.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.rbDonate_Positive) {
-                    donateTimes.setEnabled(true);
-                    lastDonated.setEnabled(true);
-                } else {
-                    donateTimes.setEnabled(false);
-                    lastDonated.setEnabled(false);
-                }
+        radioGroupDonatedBefore.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.rbDonate_Positive) {
+                donateTimes.setEnabled(true);
+                lastDonated.setEnabled(true);
+            } else {
+                donateTimes.setEnabled(false);
+                lastDonated.setEnabled(false);
             }
         });
     }
@@ -204,39 +189,20 @@ public class DonarRegistration extends AppCompatActivity implements View.OnClick
             FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
             FirebaseFirestore.getInstance().collection("Users")
                     .document(firebaseAuth.getCurrentUser().getUid())
-                    .set(registrationHelper, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Toast.makeText(DonarRegistration.this, "Registration Successful", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(DonarRegistration.this, AfterDonarReg.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(DonarRegistration.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+                    .set(registrationHelper, SetOptions.merge()).addOnSuccessListener(aVoid -> {
+                        Toast.makeText(DonarRegistration.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(DonarRegistration.this, AfterDonarReg.class));
+                        finish();
+                    }).addOnFailureListener(e -> Toast.makeText(DonarRegistration.this, e.getMessage(), Toast.LENGTH_SHORT).show());
         }
     }
 
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(DonarRegistration.this);
-        builder.setTitle("Information").setMessage("Are you sure you dont want to be a donar?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(DonarRegistration.this, Home.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setTitle("Confirmation").setMessage("Are you sure you dont want to be a donar?")
+                .setPositiveButton("Yes", (dialog, which) -> super.onBackPressed())
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

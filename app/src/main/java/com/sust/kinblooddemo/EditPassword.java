@@ -66,13 +66,13 @@ public class EditPassword extends AppCompatActivity {
                         else{
                             if (newPassword_.equals(confirmNewPassword_)){
                                 EmailAuthCredential credential = (EmailAuthCredential) EmailAuthProvider.getCredential(email_, oldPasswordP_);
-                                Profile.FIREBASE_USER.reauthenticate(credential).addOnSuccessListener(authResult -> Profile.FIREBASE_USER
+                                Home.FIREBASE_USER.reauthenticate(credential).addOnSuccessListener(authResult -> Home.FIREBASE_USER
                                         .updatePassword(newPassword_)
                                         .addOnSuccessListener(aVoid -> {
                                             Map<String, Object> password = new HashMap<>();
                                             password.put("password", newPassword_);
 
-                                            Profile.DOCUMENT_REFERENCE
+                                            Home.DOCUMENT_REFERENCE
                                                     .set(password, SetOptions.merge())
                                                     .addOnSuccessListener(aVoid1 -> {
                                                         Toast.makeText(EditPassword.this, "Password update successful", Toast.LENGTH_LONG).show();

@@ -1,6 +1,5 @@
 package com.sust.kinblooddemo;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -10,13 +9,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.SetOptions;
 import java.util.Calendar;
 
@@ -49,58 +45,45 @@ public class EditDonationInfo extends AppCompatActivity {
         String oldLastDonated_ = getIntent().getStringExtra("oldLastDonated");
         lastDonated.setText(oldLastDonated_);
 
-        radioGroupDonatedBefore.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.rb_donate_positive) {
-                    timesDonated.setEnabled(true);
-                    lastDonated.setEnabled(true);
-                } else {
-                    timesDonated.setEnabled(false);
-                    lastDonated.setEnabled(false);
-                    timesDonated.setText("0");
-                    lastDonated.setText("N/A");
-                }
+        radioGroupDonatedBefore.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.rb_donate_positive) {
+                timesDonated.setEnabled(true);
+                lastDonated.setEnabled(true);
+            } else {
+                timesDonated.setEnabled(false);
+                lastDonated.setEnabled(false);
+                timesDonated.setText("0");
+                lastDonated.setText("N/A");
             }
         });
 
-        lastDonated.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(EditDonationInfo.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        dateSetListenerd, year, month, day);
-                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                datePickerDialog.show();
-            }
+        lastDonated.setOnClickListener(v -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(EditDonationInfo.this,
+                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                    dateSetListenerd, year, month, day);
+            datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            datePickerDialog.show();
         });
 
-        dateSetListenerd = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month++;
-                String date = dayOfMonth + "/" + month + "/" + year;
-                lastDonated.setText(date);
-                dDay = dayOfMonth;
-                dMonth = month;
-                dYear = year;
-            }
+        dateSetListenerd = (view, year, month, dayOfMonth) -> {
+            month++;
+            String date = dayOfMonth + "/" + month + "/" + year;
+            lastDonated.setText(date);
+            dDay = dayOfMonth;
+            dMonth = month;
+            dYear = year;
         };
 
-        updateDonationInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                checkId = radioGroupDonatedBefore.getCheckedRadioButtonId();
-                if (checkId == -1){
-                    finish();
-                } else {
-                    if (checkId == R.id.rb_donate_negative){
-                        DonationInfoHelper donationInfoHelper = new DonationInfoHelper(0, 0, 0, 0, "No");
-                        Profile.DOCUMENT_REFERENCE
-                                .set(donationInfoHelper, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
+        updateDonationInfo.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
+            checkId = radioGroupDonatedBefore.getCheckedRadioButtonId();
+            if (checkId == -1){
+                finish();
+            } else {
+                if (checkId == R.id.rb_donate_negative){
+                    DonationInfoHelper donationInfoHelper = new DonationInfoHelper(0, 0, 0, 0, "No");
+                    Home.DOCUMENT_REFERENCE
+                            .set(donationInfoHelper, SetOptions.merge()).addOnSuccessListener(aVoid -> {
                                 Toast.makeText(EditDonationInfo.this, "Donation information update successful", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(EditDonationInfo.this, Profile.class);
                                 intent.putExtra("newLastDonated", "N/A");
@@ -108,38 +91,32 @@ public class EditDonationInfo extends AppCompatActivity {
                                 intent.putExtra("newDonatedBefore", "No");
                                 setResult(8, intent);
                                 finish();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
+                            }).addOnFailureListener(e -> {
                                 progressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(EditDonationInfo.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
+                            });
+                }
+                else {
+                    timesDonated_ = timesDonated.getText().toString();
+                    if (timesDonated_.isEmpty()){
+                        progressBar.setVisibility(View.INVISIBLE);
+                        timesDonated.setError("Field cannot be empty");
+                        timesDonated.requestFocus();
+                    }
+                    else if (timesDonated_.equals("0")){
+                        progressBar.setVisibility(View.INVISIBLE);
+                        timesDonated.setError("You have donated before so this value cannot be zero");
+                        timesDonated.requestFocus();
+                    }
+                    else if(dDay == 0){
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(EditDonationInfo.this, "Please set your last donation date", Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        timesDonated_ = timesDonated.getText().toString();
-                        if (timesDonated_.isEmpty()){
-                            progressBar.setVisibility(View.INVISIBLE);
-                            timesDonated.setError("Field cannot be empty");
-                            timesDonated.requestFocus();
-                        }
-                        else if (timesDonated_.equals("0")){
-                            progressBar.setVisibility(View.INVISIBLE);
-                            timesDonated.setError("You have donated before so this value cannot be zero");
-                            timesDonated.requestFocus();
-                        }
-                        else if(dDay == 0){
-                            progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(EditDonationInfo.this, "Please set your last donation date", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            timesdonated = Integer.parseInt(timesDonated_);
-                            DonationInfoHelper donationInfoHelper = new DonationInfoHelper(dDay, dMonth, dYear, timesdonated, "Yes");
-                            Profile.DOCUMENT_REFERENCE
-                                    .set(donationInfoHelper, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
+                        timesdonated = Integer.parseInt(timesDonated_);
+                        DonationInfoHelper donationInfoHelper = new DonationInfoHelper(dDay, dMonth, dYear, timesdonated, "Yes");
+                        Home.DOCUMENT_REFERENCE
+                                .set(donationInfoHelper, SetOptions.merge()).addOnSuccessListener(aVoid -> {
                                     Toast.makeText(EditDonationInfo.this, "Donation information update successful", Toast.LENGTH_SHORT).show();
                                     String date = dDay + " / " + dMonth + " / " + dYear;
                                     Intent intent = new Intent(EditDonationInfo.this, Profile.class);
@@ -148,15 +125,10 @@ public class EditDonationInfo extends AppCompatActivity {
                                     intent.putExtra("newDonatedBefore", "Yes");
                                     setResult(8, intent);
                                     finish();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
+                                }).addOnFailureListener(e -> {
                                     progressBar.setVisibility(View.INVISIBLE);
                                     Toast.makeText(EditDonationInfo.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        }
+                                });
                     }
                 }
             }

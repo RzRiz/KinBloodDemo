@@ -1,31 +1,18 @@
 package com.sust.kinblooddemo;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class Profile extends AppCompatActivity implements View.OnClickListener {
-
-    public static  FirebaseAuth FIREBASE_AUTH;
-    public static  FirebaseUser FIREBASE_USER;
-    public static  DocumentReference DOCUMENT_REFERENCE;
-
 
     private TextView fullName, email, phoneNumber, address, occupation, institute, donateTimes, birthDate, gender, bloodGroup, lastDonated, donatedBefore;
     private EditText password;
@@ -86,67 +73,48 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         editInstitute.setOnClickListener(this);
         editDonationInfo.setOnClickListener(this);
 
-        FIREBASE_AUTH = FirebaseAuth.getInstance();
-        FIREBASE_USER = FIREBASE_AUTH.getCurrentUser();
-        DOCUMENT_REFERENCE = FirebaseFirestore.getInstance().collection("Users").document(FIREBASE_USER.getUid());
 
-
-        DOCUMENT_REFERENCE
+        Home.DOCUMENT_REFERENCE
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        donarstatus_ = documentSnapshot.getString("donarstatus");
-                        if (donarstatus_.equals("positive") || donarstatus_.equals("negetive")) {
-                            signupHelper = documentSnapshot.toObject(SignupHelper.class);
-                            fullName_ = signupHelper.getFullName();
-                            email_ = signupHelper.getEmail();
-                            phoneNumber_ = signupHelper.getPhoneNumber();
-                            password_ = signupHelper.getPassword();
+                .addOnSuccessListener(documentSnapshot -> {
+                    donarstatus_ = documentSnapshot.getString("donarstatus");
+                    if (donarstatus_.equals("positive") || donarstatus_.equals("negetive")) {
+                        signupHelper = documentSnapshot.toObject(SignupHelper.class);
+                        fullName_ = signupHelper.getFullName();
+                        email_ = signupHelper.getEmail();
+                        phoneNumber_ = signupHelper.getPhoneNumber();
+                        password_ = signupHelper.getPassword();
 
-                            fullName.setText(fullName_);
-                            email.setText(email_);
-                            phoneNumber.setText(phoneNumber_);
-                            password.setText(password_);
-                        }
-                        if (donarstatus_.equals("positive")) {
-                            registrationHelper = documentSnapshot.toObject(RegistrationHelper.class);
-                            address_ = registrationHelper.getAddress();
-                            occupation_ = registrationHelper.getOccupation();
-                            institute_ = registrationHelper.getInstitute();
-                            int bDay = registrationHelper.getbDay(), bMonth = registrationHelper.getbMonth(), bYear = registrationHelper.getbYear();
-                            birthDate_ = bDay + " / " + bMonth + " / " + bYear;
-                            gender_ = registrationHelper.getGender();
-                            bloodGroup_ = registrationHelper.getBloodGroup();
-                            donateTimes_ = String.valueOf(registrationHelper.getDonate_times());
-                            int dDay = registrationHelper.getdDay(), dMonth = registrationHelper.getdMonth(), dYear = registrationHelper.getdYear();
-                            lastDonated_ = dDay + " / " + dMonth + " / " + dYear;
-                            donatedBefore_ = registrationHelper.getDonatedBefore();
-
-                            address.setText(address_);
-                            occupation.setText(occupation_);
-                            institute.setText(institute_);
-                            birthDate.setText(birthDate_);
-                            gender.setText(gender_);
-                            bloodGroup.setText(bloodGroup_);
-                            donateTimes.setText(donateTimes_);
-                            lastDonated.setText(lastDonated_);
-                            donatedBefore.setText(donatedBefore_);
-                        }
+                        fullName.setText(fullName_);
+                        email.setText(email_);
+                        phoneNumber.setText(phoneNumber_);
+                        password.setText(password_);
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(Profile.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+                    if (donarstatus_.equals("positive")) {
+                        registrationHelper = documentSnapshot.toObject(RegistrationHelper.class);
+                        address_ = registrationHelper.getAddress();
+                        occupation_ = registrationHelper.getOccupation();
+                        institute_ = registrationHelper.getInstitute();
+                        int bDay = registrationHelper.getbDay(), bMonth = registrationHelper.getbMonth(), bYear = registrationHelper.getbYear();
+                        birthDate_ = bDay + " / " + bMonth + " / " + bYear;
+                        gender_ = registrationHelper.getGender();
+                        bloodGroup_ = registrationHelper.getBloodGroup();
+                        donateTimes_ = String.valueOf(registrationHelper.getDonateTimes());
+                        int dDay = registrationHelper.getdDay(), dMonth = registrationHelper.getdMonth(), dYear = registrationHelper.getdYear();
+                        lastDonated_ = dDay + " / " + dMonth + " / " + dYear;
+                        donatedBefore_ = registrationHelper.getDonatedBefore();
 
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(Profile.this, Home.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+                        address.setText(address_);
+                        occupation.setText(occupation_);
+                        institute.setText(institute_);
+                        birthDate.setText(birthDate_);
+                        gender.setText(gender_);
+                        bloodGroup.setText(bloodGroup_);
+                        donateTimes.setText(donateTimes_);
+                        lastDonated.setText(lastDonated_);
+                        donatedBefore.setText(donatedBefore_);
+                    }
+                }).addOnFailureListener(e -> Toast.makeText(Profile.this, e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     @Override

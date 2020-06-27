@@ -6,16 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
@@ -48,12 +44,7 @@ public class Otp extends AppCompatActivity {
 
         sendVerification(data.get(1));
 
-        buttonVerify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                verifyCode(editTextOtp.getText().toString().trim());
-            }
-        });
+        buttonVerify.setOnClickListener(v -> verifyCode(editTextOtp.getText().toString().trim()));
 
     }
 
@@ -97,47 +88,27 @@ public class Otp extends AppCompatActivity {
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         final AuthCredential authCredential = EmailAuthProvider.getCredential(data.get(2), data.get(3));
         firebaseAuth.signInWithCredential(credential)
-                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-                        firebaseAuth.getCurrentUser().linkWithCredential(authCredential)
-                                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                                    @Override
-                                    public void onSuccess(AuthResult authResult) {
-                                        SignupHelper signupHelper = new SignupHelper(data.get(0),data.get(1),data.get(2),data.get(3), "negetive");
-                                        FirebaseFirestore.getInstance().collection("Users").document(firebaseAuth.getCurrentUser().getUid()).set(signupHelper)
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        progressDialog.dismiss();
-                                                        Toast.makeText(Otp.this, "Registration Successful", Toast.LENGTH_SHORT).show();
-                                                        Intent intent = new Intent(Otp.this, Dicision.class);
-                                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                        startActivity(intent);
-                                                    }
-                                                }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                progressDialog.dismiss();
-                                                Toast.makeText(Otp.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                progressDialog.dismiss();
-                                Toast.makeText(Otp.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
+                .addOnSuccessListener(authResult -> firebaseAuth.getCurrentUser().linkWithCredential(authCredential)
+                        .addOnSuccessListener(authResult1 -> {
+                            SignupHelper signupHelper = new SignupHelper(data.get(0),data.get(1),data.get(2),data.get(3), "negative");
+                            FirebaseFirestore.getInstance().collection("Users").document(firebaseAuth.getCurrentUser().getUid()).set(signupHelper)
+                                    .addOnSuccessListener(aVoid -> {
+                                        progressDialog.dismiss();
+                                        Toast.makeText(Otp.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(Otp.this, Dicision.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                    }).addOnFailureListener(e -> {
+                                        progressDialog.dismiss();
+                                        Toast.makeText(Otp.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }).addOnFailureListener(e -> {
+                            progressDialog.dismiss();
+                            Toast.makeText(Otp.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        })).addOnFailureListener(e -> {
+                            progressDialog.dismiss();
+                            Toast.makeText(Otp.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                progressDialog.dismiss();
-                Toast.makeText(Otp.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override

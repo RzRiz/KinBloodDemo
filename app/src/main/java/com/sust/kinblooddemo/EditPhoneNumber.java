@@ -10,8 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.PhoneAuthCredential;
@@ -41,23 +39,15 @@ public class EditPhoneNumber extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_phone_number);
         progressBar.setVisibility(View.GONE);
 
-        updatePhoneNumber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                newPhoneNumber_ = new StringBuilder(phoneNumber.getText().toString().trim());
-                if (phoneValidate()){
-                    sendVerification(newPhoneNumber_.toString());
-                }
+        updatePhoneNumber.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
+            newPhoneNumber_ = new StringBuilder(phoneNumber.getText().toString().trim());
+            if (phoneValidate()){
+                sendVerification(newPhoneNumber_.toString());
             }
         });
 
-        verifyOtp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                verifyCode(otp.getText().toString().trim());
-            }
-        });
+        verifyOtp.setOnClickListener(v -> verifyCode(otp.getText().toString().trim()));
     }
 
     private boolean phoneValidate() {
@@ -123,49 +113,29 @@ public class EditPhoneNumber extends AppCompatActivity {
     };
     private void verifyCode(String codeByUser) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, codeByUser);
-        Profile.FIREBASE_USER.reauthenticate(credential).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Profile.FIREBASE_USER.updatePhoneNumber(credential).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
+        Home.FIREBASE_USER.reauthenticate(credential).addOnSuccessListener(aVoid -> Home.FIREBASE_USER.updatePhoneNumber(credential).addOnSuccessListener(aVoid1 -> {
 
-                        Map<String, Object> phoneNumber = new HashMap<>();
-                        phoneNumber.put("phoneNumber", newPhoneNumber_);
+            Map<String, Object> phoneNumber = new HashMap<>();
+            phoneNumber.put("phoneNumber", newPhoneNumber_);
 
-                       Profile.DOCUMENT_REFERENCE
-                                .set(phoneNumber, SetOptions.merge())
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Toast.makeText(EditPhoneNumber.this, "Phone number update successful", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(EditPhoneNumber.this, Profile.class);
-                                        intent.putExtra("newPhoneNumber", newPhoneNumber_.toString());
-                                        setResult(4, intent);
-                                        finish();
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                progressBar.setVisibility(View.INVISIBLE);
-                                Toast.makeText(EditPhoneNumber.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+            Home.DOCUMENT_REFERENCE
+                    .set(phoneNumber, SetOptions.merge())
+                    .addOnSuccessListener(aVoid11 -> {
+                        Toast.makeText(EditPhoneNumber.this, "Phone number update successful", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(EditPhoneNumber.this, Profile.class);
+                        intent.putExtra("newPhoneNumber", newPhoneNumber_.toString());
+                        setResult(4, intent);
+                        finish();
+                    }).addOnFailureListener(e -> {
                         progressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(EditPhoneNumber.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(EditPhoneNumber.this, e.getMessage(), Toast.LENGTH_LONG).show();
-            }
+                    });
+        }).addOnFailureListener(e -> {
+            progressBar.setVisibility(View.INVISIBLE);
+            Toast.makeText(EditPhoneNumber.this, e.getMessage(), Toast.LENGTH_LONG).show();
+        })).addOnFailureListener(e -> {
+            progressBar.setVisibility(View.INVISIBLE);
+            Toast.makeText(EditPhoneNumber.this, e.getMessage(), Toast.LENGTH_LONG).show();
         });
 
     }

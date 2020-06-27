@@ -1,6 +1,5 @@
 package com.sust.kinblooddemo;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,11 +10,6 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
@@ -40,60 +34,45 @@ public class EditBloodGroup extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
         Button updateBloodGroup = findViewById(R.id.btn_update_blood_group);
 
-        radioGroupPositive.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                bG = 1;
-                if (checkedId != -1 && isChecking) {
-                    isChecking = false;
-                    radioGroupNegetive.clearCheck();
-                    radioButtonBg = findViewById(checkedId);
-                }
-                isChecking = true;
+        radioGroupPositive.setOnCheckedChangeListener((group, checkedId) -> {
+            bG = 1;
+            if (checkedId != -1 && isChecking) {
+                isChecking = false;
+                radioGroupNegetive.clearCheck();
+                radioButtonBg = findViewById(checkedId);
             }
+            isChecking = true;
         });
-        radioGroupNegetive.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                bG = 1;
-                if (checkedId != -1 && isChecking) {
-                    isChecking = false;
-                    radioGroupPositive.clearCheck();
-                    radioButtonBg = findViewById(checkedId);
-                }
-                isChecking = true;
+        radioGroupNegetive.setOnCheckedChangeListener((group, checkedId) -> {
+            bG = 1;
+            if (checkedId != -1 && isChecking) {
+                isChecking = false;
+                radioGroupPositive.clearCheck();
+                radioButtonBg = findViewById(checkedId);
             }
+            isChecking = true;
         });
 
-        updateBloodGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                if (bG != 1){
-                    finish();
-                }
-                else {
-                    String bloodGroup_ = radioButtonBg.getText().toString();
-                    Map<String, Object> bloodGroup = new HashMap<>();
-                    bloodGroup.put("bloodGroup", bloodGroup_);
-                    Profile.DOCUMENT_REFERENCE
-                            .set(bloodGroup, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
+        updateBloodGroup.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
+            if (bG != 1){
+                finish();
+            }
+            else {
+                String bloodGroup_ = radioButtonBg.getText().toString();
+                Map<String, Object> bloodGroup = new HashMap<>();
+                bloodGroup.put("bloodGroup", bloodGroup_);
+                Home.DOCUMENT_REFERENCE
+                        .set(bloodGroup, SetOptions.merge()).addOnSuccessListener(aVoid -> {
                             Toast.makeText(EditBloodGroup.this, "Blood group update successful", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(EditBloodGroup.this, Profile.class);
                             intent.putExtra("newBloodGroup", bloodGroup_);
                             setResult(9, intent);
                             finish();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
+                        }).addOnFailureListener(e -> {
                             progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(EditBloodGroup.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+                        });
             }
         });
     }

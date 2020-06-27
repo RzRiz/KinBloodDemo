@@ -44,32 +44,29 @@ public class MainActivity extends AppCompatActivity {
         confirmPassword.getEditText().addTextChangedListener(textWatcher);
 
 
-        buttonSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        buttonSignUp.setOnClickListener(v -> {
 
-                getData();
+            getData();
 
-                if (!validate()) {
-                    return;
-                }
+            if (!validate()) {
+                return;
+            }
 
-                if (password_.equals(confirm_Password)) {
-                    ArrayList<String> data = new ArrayList<>();
+            if (password_.equals(confirm_Password)) {
+                ArrayList<String> data = new ArrayList<>();
 
-                    data.add(full_Name);
-                    data.add(phone_Number.toString());
-                    data.add(email_);
-                    data.add(password_);
+                data.add(full_Name);
+                data.add(phone_Number.toString());
+                data.add(email_);
+                data.add(password_);
 
-                    Intent intent = new Intent(MainActivity.this, Otp.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putStringArrayListExtra("data", data);
-                    startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, Otp.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putStringArrayListExtra("data", data);
+                startActivity(intent);
 
-                } else {
-                    Toast.makeText(MainActivity.this, "Passwords do not match", Toast.LENGTH_LONG).show();
-                }
+            } else {
+                Toast.makeText(MainActivity.this, "Passwords do not match", Toast.LENGTH_LONG).show();
             }
         });
     }
