@@ -1,19 +1,20 @@
 package com.sust.kinblooddemo;
 
 public class RegistrationHelper {
-    private String address, gender, bloodGroup, occupation, institute, donarstatus, donatedBefore;
+    private String currentAddress, homeDistrict, gender, bloodGroup, occupation, institute, donarStatus;
     private int bDay, bMonth, bYear, donateTimes, dDay, dMonth, dYear;
 
     public RegistrationHelper(){}
 
 
-    public RegistrationHelper(String address, String gender, String bloodGroup, String occupation, String institute, String donarstatus, int bDay, int bMonth, int bYear, int donateTimes, int dDay, int dMonth, int dYear, String donatedBefore) {
-        this.address = address;
+    public RegistrationHelper(String currentAddress, String homeDistrict, String gender, String bloodGroup, String occupation, String institute, String donarStatus, int bDay, int bMonth, int bYear, int donateTimes, int dDay, int dMonth, int dYear) {
+        this.currentAddress = currentAddress;
+        this.homeDistrict = homeDistrict;
         this.gender = gender;
         this.bloodGroup = bloodGroup;
         this.occupation = occupation;
         this.institute = institute;
-        this.donarstatus = donarstatus;
+        this.donarStatus = donarStatus;
         this.bDay = bDay;
         this.bMonth = bMonth;
         this.bYear = bYear;
@@ -21,15 +22,22 @@ public class RegistrationHelper {
         this.dDay = dDay;
         this.dMonth = dMonth;
         this.dYear = dYear;
-        this.donatedBefore = donatedBefore;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCurrentAddress() {
+        return currentAddress;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCurrentAddress(String currentAddress) {
+        this.currentAddress = currentAddress;
+    }
+
+    public String getHomeDistrict() {
+        return homeDistrict;
+    }
+
+    public void setHomeDistrict(String homeDistrict) {
+        this.homeDistrict = homeDistrict;
     }
 
     public String getGender() {
@@ -64,12 +72,12 @@ public class RegistrationHelper {
         this.institute = institute;
     }
 
-    public String getDonarstatus() {
-        return donarstatus;
+    public String getDonarStatus() {
+        return donarStatus;
     }
 
-    public void setDonarstatus(String donarstatus) {
-        this.donarstatus = donarstatus;
+    public void setDonarStatus(String donarStatus) {
+        this.donarStatus = donarStatus;
     }
 
     public int getbDay() {
@@ -126,13 +134,5 @@ public class RegistrationHelper {
 
     public void setdYear(int dYear) {
         this.dYear = dYear;
-    }
-
-    public String getDonatedBefore() {
-        return donatedBefore;
-    }
-
-    public void setDonatedBefore(String donatedBefore) {
-        this.donatedBefore = donatedBefore;
     }
 }

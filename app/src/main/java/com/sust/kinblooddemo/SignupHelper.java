@@ -1,17 +1,20 @@
 package com.sust.kinblooddemo;
 
 public class SignupHelper {
-    private String fullName, phoneNumber, email, password, donarstatus;
+    private String fullName, phoneNumber, email, password, donarStatus, formFactor;
+    private int donateTimes;
 
     public SignupHelper() {
     }
 
-    public SignupHelper(String fullName, String phoneNumber, String email, String password, String donarstatus) {
+    public SignupHelper(String fullName, String phoneNumber, String email, String password, String donarStatus, int donateTimes, String formFactor) {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
-        this.donarstatus = donarstatus;
+        this.donarStatus = donarStatus;
+        this.donateTimes = donateTimes;
+        this.formFactor = formFactor;
     }
 
     public String getFullName() {
@@ -46,11 +49,27 @@ public class SignupHelper {
         this.password = password;
     }
 
-    public String getDonarstatus() {
-        return donarstatus;
+    public String getDonarStatus() {
+        return donarStatus;
     }
 
-    public void setDonarstatus(String donarstatus) {
-        this.donarstatus = donarstatus;
+    public void setDonarStatus(String donarStatus) {
+        this.donarStatus = donarStatus;
+    }
+
+    public String getFormFactor() {
+        return formFactor;
+    }
+
+    public void setFormFactor(String formFactor) {
+        this.formFactor = formFactor;
+    }
+
+    public int getDonateTimes() {
+        return donateTimes;
+    }
+
+    public void setDonateTimes(int donateTimes) {
+        this.donateTimes = donateTimes;
     }
 }

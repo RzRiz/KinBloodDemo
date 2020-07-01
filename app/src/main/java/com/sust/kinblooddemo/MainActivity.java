@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
                 data.add(password_);
 
                 Intent intent = new Intent(MainActivity.this, Otp.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putStringArrayListExtra("data", data);
                 startActivity(intent);
 
@@ -170,15 +169,6 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void signuptologin(View view){
-        Intent intent = new Intent(MainActivity.this, Login.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(MainActivity.this, Login.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        finish();
     }
 }

@@ -2,17 +2,15 @@ package com.sust.kinblooddemo;
 
 public class DonationInfoHelper {
     private int dDay, dMonth, dYear, donateTimes;
-    private String donatedBefore;
 
     public DonationInfoHelper() {
     }
 
-    public DonationInfoHelper(int dDay, int dMonth, int dYear, int donateTimes, String donatedBefore) {
+    public DonationInfoHelper(int dDay, int dMonth, int dYear, int donateTimes) {
         this.dDay = dDay;
         this.dMonth = dMonth;
         this.dYear = dYear;
         this.donateTimes = donateTimes;
-        this.donatedBefore = donatedBefore;
     }
 
     public int getdDay() {
@@ -45,13 +43,5 @@ public class DonationInfoHelper {
 
     public void setDonateTimes(int donateTimes) {
         this.donateTimes = donateTimes;
-    }
-
-    public String getDonatedBefore() {
-        return donatedBefore;
-    }
-
-    public void setDonatedBefore(String donatedBefore) {
-        this.donatedBefore = donatedBefore;
     }
 }

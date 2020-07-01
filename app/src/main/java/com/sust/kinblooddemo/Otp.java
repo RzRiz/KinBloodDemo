@@ -90,14 +90,15 @@ public class Otp extends AppCompatActivity {
         firebaseAuth.signInWithCredential(credential)
                 .addOnSuccessListener(authResult -> firebaseAuth.getCurrentUser().linkWithCredential(authCredential)
                         .addOnSuccessListener(authResult1 -> {
-                            SignupHelper signupHelper = new SignupHelper(data.get(0),data.get(1),data.get(2),data.get(3), "negative");
+                            SignupHelper signupHelper = new SignupHelper(data.get(0),data.get(1),data.get(2),data.get(3), "negative", 0, "app");
                             FirebaseFirestore.getInstance().collection("Users").document(firebaseAuth.getCurrentUser().getUid()).set(signupHelper)
                                     .addOnSuccessListener(aVoid -> {
                                         progressDialog.dismiss();
                                         Toast.makeText(Otp.this, "Registration Successful", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(Otp.this, Dicision.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
+                                        finish();
                                     }).addOnFailureListener(e -> {
                                         progressDialog.dismiss();
                                         Toast.makeText(Otp.this, e.getMessage(), Toast.LENGTH_SHORT).show();

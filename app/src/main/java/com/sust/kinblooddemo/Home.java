@@ -58,7 +58,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.nav_become_donar:
                 DOCUMENT_REFERENCE
                         .get().addOnSuccessListener(documentSnapshot -> {
-                            if (documentSnapshot.getString("donarstatus").equals("negative")) {
+                            if (documentSnapshot.getString("donarStatus").equals("negative")) {
                                 startActivity(new Intent(Home.this, DonarRegistration.class));
                             } else {
                                 Toast.makeText(Home.this, "You are already a donar", Toast.LENGTH_SHORT).show();
