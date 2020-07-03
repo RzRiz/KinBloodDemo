@@ -3,7 +3,12 @@
     <color name="colorPrimary">#BA2025</color>
     <color name="colorPrimaryDark">#901616</color>
     <color name="colorAccent">#EE3535</color>
-    <color name="colorBlack">#000000</color>
     <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorAsh">#333333</color>
+    <color name="colorAshWhite">#dddddd</color>
+    <color name="transparentWhite">#7fffffff</color>
+    <color name="transparentBlack">#7f000000</color>
+    <color name="transparentAsh">#7f333333</color>
     <color name="colorYellowWhite">#EEF4DC</color>
 </resources>

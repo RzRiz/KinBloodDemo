@@ -14,7 +14,6 @@
         android:text="KIN Blood Motto"
         android:textSize="30sp"
         android:textColor="@color/colorBlack"
-        android:fontFamily="@font/candara"
         android:gravity="center"/>
 
     <pl.droidsonroids.gif.GifImageView
@@ -30,7 +29,6 @@
         android:text="Powered by KIN"
         android:textSize="25sp"
         android:textColor="@color/colorBlack"
-        android:fontFamily="@font/candara"
         android:gravity="center|bottom"/>
 
     <TextView
@@ -40,7 +38,6 @@
         android:text="https://kinsust.org/"
         android:textSize="20sp"
         android:textColor="@color/colorBlack"
-        android:fontFamily="@font/candara"
         android:gravity="center|top"/>
 
 </LinearLayout>

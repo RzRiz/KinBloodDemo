@@ -11,9 +11,12 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 public class Login extends AppCompatActivity {
 
@@ -26,17 +29,21 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        ImageView appImage = findViewById(R.id.iv_app);
         email = findViewById(R.id.et_loginEmail);
         password = findViewById(R.id.et_loginPassword);
         Button login = findViewById(R.id.btn_login);
-        Button forgotPassword = findViewById(R.id.btn_forgot_password);
+        TextView forgotPassword = findViewById(R.id.tv_forgot_password);
         firebaseAuth = FirebaseAuth.getInstance();
         progressBar = findViewById(R.id.progress_login);
         progressBar.setVisibility(View.INVISIBLE);
 
+        Picasso.get().load(R.drawable.ig_app)
+                .centerCrop()
+                .fit()
+                .into(appImage);
 
         forgotPassword.setOnClickListener(v -> startActivity(new Intent(Login.this, PasswordReset.class)));
-
 
         login.setOnClickListener(v -> {
             closeSoftKeyBoard();
