@@ -1,25 +1,19 @@
 package com.sust.kinblooddemo;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -31,9 +25,9 @@ public class DonarRegistration extends AppCompatActivity implements View.OnClick
     private RadioGroup radioGroupPositive, radioGroupNegetive, radioGroupGender, radioGroupDonatedBefore;
     private boolean isChecking = true;
     private RadioButton radioButtonBg;
-    private EditText address, occupation, institute, donateTimes;
+    private EditText currentAddress, homeDistrict, occupation, institute, donateTimes;
     private Button birthDay, lastDonated;
-    private String address_, occupation_, institute_, blood_Group, gender_, donatedBefore_;
+    private String currentAddress_, homeDistrict_, occupation_, institute_, blood_Group, gender_;
     private DatePickerDialog.OnDateSetListener dateSetListenerb, dateSetListenerd;
     private Calendar calendar = Calendar.getInstance();
     private int year = calendar.get(Calendar.YEAR), month = calendar.get(Calendar.MONTH), day = calendar.get(Calendar.DAY_OF_MONTH), bG = 0, bYear = 0, bMonth = 0, bDay = 0, dTimes = 0, dYear = 0, dMonth = 0, dDay = 0;
@@ -47,7 +41,8 @@ public class DonarRegistration extends AppCompatActivity implements View.OnClick
         radioGroupNegetive = findViewById(R.id.rgNegetive);
         radioGroupGender = findViewById(R.id.rgGender);
         radioGroupDonatedBefore = findViewById(R.id.rgDonated_before);
-        address = findViewById(R.id.et_address);
+        currentAddress = findViewById(R.id.et_current_address);
+        homeDistrict = findViewById(R.id.et_home_district);
         occupation = findViewById(R.id.et_occupation);
         institute = findViewById(R.id.et_institute);
         donateTimes = findViewById(R.id.et_donate_times);
@@ -55,55 +50,52 @@ public class DonarRegistration extends AppCompatActivity implements View.OnClick
         lastDonated = findViewById(R.id.btn_ldblood);
         Button register = findViewById(R.id.btn_regester);
 
-        radioGroupPositive.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                bG = 1;
-                if (checkedId != -1 && isChecking) {
-                    isChecking = false;
-                    radioGroupNegetive.clearCheck();
-                    radioButtonBg = findViewById(checkedId);
-                }
-                isChecking = true;
+        radioGroupPositive.setOnCheckedChangeListener((group, checkedId) -> {
+            bG = 1;
+            if (checkedId != -1 && isChecking) {
+                isChecking = false;
+                radioGroupNegetive.clearCheck();
+                radioButtonBg = findViewById(checkedId);
             }
+            isChecking = true;
         });
-        radioGroupNegetive.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                bG = 1;
-                if (checkedId != -1 && isChecking) {
-                    isChecking = false;
-                    radioGroupPositive.clearCheck();
-                    radioButtonBg = findViewById(checkedId);
-                }
-                isChecking = true;
+        radioGroupNegetive.setOnCheckedChangeListener((group, checkedId) -> {
+            bG = 1;
+            if (checkedId != -1 && isChecking) {
+                isChecking = false;
+                radioGroupPositive.clearCheck();
+                radioButtonBg = findViewById(checkedId);
             }
+            isChecking = true;
         });
 
         birthDay.setOnClickListener(this);
         lastDonated.setOnClickListener(this);
         register.setOnClickListener(this);
 
-        radioGroupDonatedBefore.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.rbDonate_Positive) {
-                    donateTimes.setEnabled(true);
-                    lastDonated.setEnabled(true);
-                } else {
-                    donateTimes.setEnabled(false);
-                    lastDonated.setEnabled(false);
-                }
+        radioGroupDonatedBefore.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.rbDonate_Positive) {
+                donateTimes.setEnabled(true);
+                lastDonated.setEnabled(true);
+            } else {
+                donateTimes.setEnabled(false);
+                lastDonated.setEnabled(false);
             }
         });
     }
 
 
     public boolean getData() {
-        address_ = address.getText().toString().trim();
-        if (address_.isEmpty()) {
-            address.setError("Field cannot be empty");
-            address.requestFocus();
+        currentAddress_ = currentAddress.getText().toString();
+        if (currentAddress_.isEmpty()) {
+            currentAddress.setError("Field cannot be empty");
+            currentAddress.requestFocus();
+            return false;
+        }
+        homeDistrict_ = homeDistrict.getText().toString();
+        if (homeDistrict_.isEmpty()) {
+            homeDistrict.setError("Field cannot be empty");
+            homeDistrict.requestFocus();
             return false;
         }
         if (bYear == 0 || bMonth == 0 || bDay == 0) {
@@ -157,8 +149,6 @@ public class DonarRegistration extends AppCompatActivity implements View.OnClick
             Toast.makeText(this, "When did you last donate blood", Toast.LENGTH_SHORT).show();
             return false;
         }
-        RadioButton radioButtonDonatedBefore = findViewById(j);
-        donatedBefore_ = radioButtonDonatedBefore.getText().toString();
         return true;
     }
 
@@ -198,45 +188,26 @@ public class DonarRegistration extends AppCompatActivity implements View.OnClick
             if (!getData()) {
                 return;
             }
-            RegistrationHelper registrationHelper = new RegistrationHelper(address_, gender_
+            RegistrationHelper registrationHelper = new RegistrationHelper(currentAddress_, homeDistrict_, gender_
                     , blood_Group, occupation_, institute_, "positive", bDay, bMonth
-                    , bYear, dTimes, dDay, dMonth, dYear, donatedBefore_);
+                    , bYear, dTimes, dDay, dMonth, dYear);
             FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
             FirebaseFirestore.getInstance().collection("Users")
                     .document(firebaseAuth.getCurrentUser().getUid())
-                    .set(registrationHelper, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Toast.makeText(DonarRegistration.this, "Registration Successful", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(DonarRegistration.this, AfterDonarReg.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(DonarRegistration.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+                    .set(registrationHelper, SetOptions.merge()).addOnSuccessListener(aVoid -> {
+                        Toast.makeText(DonarRegistration.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(DonarRegistration.this, AfterDonarReg.class));
+                        finish();
+                    }).addOnFailureListener(e -> Toast.makeText(DonarRegistration.this, e.getMessage(), Toast.LENGTH_SHORT).show());
         }
     }
 
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(DonarRegistration.this);
-        builder.setTitle("Information").setMessage("Are you sure you dont want to be a donar?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(DonarRegistration.this, Home.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setTitle("Confirmation").setMessage("Are you sure you dont want to be a donar?")
+                .setPositiveButton("Yes", (dialog, which) -> super.onBackPressed())
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

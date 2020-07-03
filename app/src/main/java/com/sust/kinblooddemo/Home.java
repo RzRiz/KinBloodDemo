@@ -7,21 +7,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    public static  FirebaseAuth FIREBASE_AUTH;
+    public static FirebaseUser FIREBASE_USER;
+    public static DocumentReference DOCUMENT_REFERENCE;
 
     private DrawerLayout drawerLayout;
 
@@ -29,6 +29,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        FIREBASE_AUTH = FirebaseAuth.getInstance();
+        FIREBASE_USER = FIREBASE_AUTH.getCurrentUser();
+        DOCUMENT_REFERENCE = FirebaseFirestore.getInstance().collection("Users").document(FIREBASE_USER.getUid());
 
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -49,48 +53,29 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_need_donar:
-                Intent intentNotif = new Intent(Home.this, Notification.class);
-                intentNotif.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intentNotif);
+                startActivity(new Intent(Home.this, Notification.class));
                 break;
             case R.id.nav_become_donar:
-                FirebaseFirestore.getInstance()
-                        .collection("Users")
-                        .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.getString("donarstatus").equals("negetive")) {
-                            Intent intentDonarReg = new Intent(Home.this, DonarRegistration.class);
-                            intentDonarReg.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intentDonarReg);
-                        } else {
-                            Toast.makeText(Home.this, "You are already a donar", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(Home.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                DOCUMENT_REFERENCE
+                        .get().addOnSuccessListener(documentSnapshot -> {
+                            if (documentSnapshot.getString("donarStatus").equals("negative")) {
+                                startActivity(new Intent(Home.this, DonarRegistration.class));
+                            } else {
+                                Toast.makeText(Home.this, "You are already a donar", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(e -> Toast.makeText(Home.this, e.getMessage(), Toast.LENGTH_SHORT).show());
                 break;
             case R.id.nav_req_status:
-                Intent intentReqStat = new Intent(Home.this, AfterNotif.class);
-                intentReqStat.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intentReqStat);
+                startActivity(new Intent(Home.this, AfterNotif.class));
                 break;
             case R.id.nav_profile:
-                Intent intentProfile = new Intent(Home.this, Profile.class);
-                intentProfile.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intentProfile);
+                startActivity(new Intent(Home.this, Profile.class));
                 break;
             case R.id.nav_log_out:
                 FirebaseAuth.getInstance().signOut();
                 Toast.makeText(this, "Signed out successfully", Toast.LENGTH_SHORT).show();
-                Intent intentLogin = new Intent(Home.this, Login.class);
-                intentLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intentLogin);
+                startActivity(new Intent(Home.this, Login.class));
+                finish();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -103,17 +88,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(Home.this);
-            builder.setTitle("Confirm exit").setMessage("Are you sure you want to exit?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
+            builder.setTitle("Confirm exit").setMessage("Are you sure you want to exit?")
+                    .setPositiveButton("Yes", (dialog, which) -> finish())
+                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss());
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         }
