@@ -20,7 +20,7 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.Calendar;
 
-public class DonarRegistration extends AppCompatActivity implements View.OnClickListener {
+public class DonorRegistration extends AppCompatActivity implements View.OnClickListener {
 
     private RadioGroup radioGroupPositive, radioGroupNegetive, radioGroupGender, radioGroupDonatedBefore;
     private boolean isChecking = true;
@@ -35,7 +35,7 @@ public class DonarRegistration extends AppCompatActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_donar__registration);
+        setContentView(R.layout.activity_donor_registration);
 
         radioGroupPositive = findViewById(R.id.rgPositive);
         radioGroupNegetive = findViewById(R.id.rgNegetive);
@@ -155,7 +155,7 @@ public class DonarRegistration extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_bday) {
-            DatePickerDialog datePickerDialog = new DatePickerDialog(DonarRegistration.this,
+            DatePickerDialog datePickerDialog = new DatePickerDialog(DonorRegistration.this,
                     android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                     dateSetListenerb, year, month, day);
             datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -170,7 +170,7 @@ public class DonarRegistration extends AppCompatActivity implements View.OnClick
             bDay = dayOfMonth;
         };
         if (v.getId() == R.id.btn_ldblood) {
-            DatePickerDialog datePickerDialog = new DatePickerDialog(DonarRegistration.this,
+            DatePickerDialog datePickerDialog = new DatePickerDialog(DonorRegistration.this,
                     android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                     dateSetListenerd, year, month, day);
             datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -195,17 +195,17 @@ public class DonarRegistration extends AppCompatActivity implements View.OnClick
             FirebaseFirestore.getInstance().collection("Users")
                     .document(firebaseAuth.getCurrentUser().getUid())
                     .set(registrationHelper, SetOptions.merge()).addOnSuccessListener(aVoid -> {
-                        Toast.makeText(DonarRegistration.this, "Registration Successful", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(DonarRegistration.this, AfterDonarReg.class));
+                        Toast.makeText(DonorRegistration.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(DonorRegistration.this, AfterDonorReg.class));
                         finish();
-                    }).addOnFailureListener(e -> Toast.makeText(DonarRegistration.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+                    }).addOnFailureListener(e -> Toast.makeText(DonorRegistration.this, e.getMessage(), Toast.LENGTH_SHORT).show());
         }
     }
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(DonarRegistration.this);
-        builder.setTitle("Confirmation").setMessage("Are you sure you dont want to be a donar?")
+        AlertDialog.Builder builder = new AlertDialog.Builder(DonorRegistration.this);
+        builder.setTitle("Confirmation").setMessage("Are you sure you don't want to be a donor?")
                 .setPositiveButton("Yes", (dialog, which) -> super.onBackPressed())
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();

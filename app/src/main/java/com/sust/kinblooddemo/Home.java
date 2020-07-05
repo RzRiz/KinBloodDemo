@@ -10,14 +10,20 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Home extends AppCompatActivity{
 
     public static  FirebaseAuth FIREBASE_AUTH;
     public static FirebaseUser FIREBASE_USER;
@@ -45,41 +51,107 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_need_donar);
-    }
+        TextView name = findViewById(R.id.tv_name);
+        TextView email = findViewById(R.id.tv_email);
+        TextView home = findViewById(R.id.tv_home);
+        TextView needDonor = findViewById(R.id.tv_need_donor);
+        TextView becomeDonor = findViewById(R.id.tv_become_donor);
+        TextView request = findViewById(R.id.tv_request);
+        TextView profile = findViewById(R.id.tv_profile);
+        TextView settings = findViewById(R.id.tv_settings);
+        TextView about = findViewById(R.id.tv_about);
+        TextView rate = findViewById(R.id.tv_rate);
+        TextView logOut = findViewById(R.id.tv_log_out);
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_need_donar:
+        DOCUMENT_REFERENCE.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    name.setText(document.get("fullName").toString());
+                }
+            }
+        });
+
+        email.setText(FIREBASE_USER.getEmail());
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        needDonor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 startActivity(new Intent(Home.this, Notification.class));
-                break;
-            case R.id.nav_become_donar:
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        becomeDonor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 DOCUMENT_REFERENCE
                         .get().addOnSuccessListener(documentSnapshot -> {
-                            if (documentSnapshot.getString("donarStatus").equals("negative")) {
-                                startActivity(new Intent(Home.this, DonarRegistration.class));
-                            } else {
-                                Toast.makeText(Home.this, "You are already a donar", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(e -> Toast.makeText(Home.this, e.getMessage(), Toast.LENGTH_SHORT).show());
-                break;
-            case R.id.nav_req_status:
+                    if (documentSnapshot.getString("donorStatus").equals("negative")) {
+                        startActivity(new Intent(Home.this, DonorRegistration.class));
+                    } else {
+                        Toast.makeText(Home.this, "You are already a donor", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(e -> Toast.makeText(Home.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 startActivity(new Intent(Home.this, AfterNotif.class));
-                break;
-            case R.id.nav_profile:
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 startActivity(new Intent(Home.this, Profile.class));
-                break;
-            case R.id.nav_log_out:
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        rate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
+
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                Toast.makeText(this, "Signed out successfully", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(Home.this, Login.class));
+                Toast.makeText(Home.this, "Signed out successfully", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Home.this, LoginActivity.class));
                 finish();
-                break;
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
     }
 
     @Override

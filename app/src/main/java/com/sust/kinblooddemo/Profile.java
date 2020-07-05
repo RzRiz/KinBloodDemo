@@ -15,7 +15,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
 
     private TextView fullName, email, phoneNumber, currentAddress, homeDistrict, occupation, institute, donateTimes, birthDate, gender, bloodGroup, lastDonated;
     private EditText password;
-    private String fullName_, email_, phoneNumber_, password_, currentAddress_, homeDistrict_, occupation_, institute_, donarStatus_, birthDate_, gender_, bloodGroup_, donateTimes_, lastDonated_;
+    private String fullName_, email_, phoneNumber_, password_, currentAddress_, homeDistrict_, occupation_, institute_, donorStatus_, birthDate_, gender_, bloodGroup_, donateTimes_, lastDonated_;
     private SignupHelper signupHelper;
     private RegistrationHelper registrationHelper;
 
@@ -52,8 +52,8 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         Home.DOCUMENT_REFERENCE
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    donarStatus_ = documentSnapshot.getString("donarStatus");
-                    if (donarStatus_.equals("positive") || donarStatus_.equals("negative")) {
+                    donorStatus_ = documentSnapshot.getString("donorStatus");
+                    if (donorStatus_.equals("positive") || donorStatus_.equals("negative")) {
                         signupHelper = documentSnapshot.toObject(SignupHelper.class);
                         fullName_ = signupHelper.getFullName();
                         email_ = signupHelper.getEmail();
@@ -65,7 +65,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                         phoneNumber.setText(phoneNumber_);
                         password.setText(password_);
                     }
-                    if (donarStatus_.equals("positive")) {
+                    if (donorStatus_.equals("positive")) {
                         registrationHelper = documentSnapshot.toObject(RegistrationHelper.class);
                         currentAddress_ = registrationHelper.getCurrentAddress();
                         homeDistrict_ = registrationHelper.getHomeDistrict();
@@ -101,8 +101,8 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         }
 
         else if (v.getId() == R.id.tv_edit_blood_info) {
-            if (donarStatus_.equals("negative")){
-                Toast.makeText(this, "You have to be a donar to edit this field", Toast.LENGTH_SHORT).show();
+            if (donorStatus_.equals("negative")){
+                Toast.makeText(this, "You have to be a donor to edit this field", Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(Profile.this, EditBloodInfo.class);
@@ -111,8 +111,8 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         }
 
         else if (v.getId() == R.id.tv_edit_other_info) {
-            if (donarStatus_.equals("negative")){
-                Toast.makeText(this, "You have to be a donar to edit this field", Toast.LENGTH_SHORT).show();
+            if (donorStatus_.equals("negative")){
+                Toast.makeText(this, "You have to be a donor to edit this field", Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(Profile.this, EditOtherInfo.class);

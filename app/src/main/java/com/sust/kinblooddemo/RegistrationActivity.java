@@ -18,7 +18,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity {
+public class RegistrationActivity extends AppCompatActivity {
 
     private TextInputLayout password, confirmPassword;
     private EditText fullName, phoneNumber, email;
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_registration);
 
         fullName = findViewById(R.id.et_fullname);
         phoneNumber = findViewById(R.id.et_phoneNumber);
@@ -60,12 +60,12 @@ public class MainActivity extends AppCompatActivity {
                 data.add(email_);
                 data.add(password_);
 
-                Intent intent = new Intent(MainActivity.this, Otp.class);
+                Intent intent = new Intent(RegistrationActivity.this, VerificationActivity.class);
                 intent.putStringArrayListExtra("data", data);
                 startActivity(intent);
 
             } else {
-                Toast.makeText(MainActivity.this, "Passwords do not match", Toast.LENGTH_LONG).show();
+                Toast.makeText(RegistrationActivity.this, "Passwords do not match", Toast.LENGTH_LONG).show();
             }
         });
     }

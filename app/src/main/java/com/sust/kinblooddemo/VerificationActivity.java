@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 
-public class Otp extends AppCompatActivity {
+public class VerificationActivity extends AppCompatActivity {
 
     private EditText editTextOtp;
     private String verificationId;
@@ -33,7 +33,7 @@ public class Otp extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_otp);
+        setContentView(R.layout.activity_verification);
 
         editTextOtp = findViewById(R.id.et_otp);
         progressDialog = new ProgressDialog(this);
@@ -94,21 +94,21 @@ public class Otp extends AppCompatActivity {
                             FirebaseFirestore.getInstance().collection("Users").document(firebaseAuth.getCurrentUser().getUid()).set(signupHelper)
                                     .addOnSuccessListener(aVoid -> {
                                         progressDialog.dismiss();
-                                        Toast.makeText(Otp.this, "Registration Successful", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(Otp.this, Dicision.class);
+                                        Toast.makeText(VerificationActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(VerificationActivity.this, Decision.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                         finish();
                                     }).addOnFailureListener(e -> {
                                         progressDialog.dismiss();
-                                        Toast.makeText(Otp.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(VerificationActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         }).addOnFailureListener(e -> {
                             progressDialog.dismiss();
-                            Toast.makeText(Otp.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VerificationActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         })).addOnFailureListener(e -> {
                             progressDialog.dismiss();
-                            Toast.makeText(Otp.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VerificationActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
     }
 

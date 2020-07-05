@@ -1,20 +1,20 @@
 package com.sust.kinblooddemo;
 
 public class RegistrationHelper {
-    private String currentAddress, homeDistrict, gender, bloodGroup, occupation, institute, donarStatus;
+    private String currentAddress, homeDistrict, gender, bloodGroup, occupation, institute, donorStatus;
     private int bDay, bMonth, bYear, donateTimes, dDay, dMonth, dYear;
 
     public RegistrationHelper(){}
 
 
-    public RegistrationHelper(String currentAddress, String homeDistrict, String gender, String bloodGroup, String occupation, String institute, String donarStatus, int bDay, int bMonth, int bYear, int donateTimes, int dDay, int dMonth, int dYear) {
+    public RegistrationHelper(String currentAddress, String homeDistrict, String gender, String bloodGroup, String occupation, String institute, String donorStatus, int bDay, int bMonth, int bYear, int donateTimes, int dDay, int dMonth, int dYear) {
         this.currentAddress = currentAddress;
         this.homeDistrict = homeDistrict;
         this.gender = gender;
         this.bloodGroup = bloodGroup;
         this.occupation = occupation;
         this.institute = institute;
-        this.donarStatus = donarStatus;
+        this.donorStatus = donorStatus;
         this.bDay = bDay;
         this.bMonth = bMonth;
         this.bYear = bYear;
@@ -72,12 +72,12 @@ public class RegistrationHelper {
         this.institute = institute;
     }
 
-    public String getDonarStatus() {
-        return donarStatus;
+    public String getDonorStatus() {
+        return donorStatus;
     }
 
-    public void setDonarStatus(String donarStatus) {
-        this.donarStatus = donarStatus;
+    public void setDonorStatus(String donorStatus) {
+        this.donorStatus = donorStatus;
     }
 
     public int getbDay() {

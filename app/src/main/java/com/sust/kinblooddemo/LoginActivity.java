@@ -11,14 +11,12 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
-import com.squareup.picasso.Picasso;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private EditText email, password;
     private FirebaseAuth firebaseAuth;
@@ -37,7 +35,7 @@ public class Login extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_login);
         progressBar.setVisibility(View.INVISIBLE);
 
-        forgotPassword.setOnClickListener(v -> startActivity(new Intent(Login.this, PasswordReset.class)));
+        forgotPassword.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, PasswordReset.class)));
 
         login.setOnClickListener(v -> {
             closeSoftKeyBoard();
@@ -71,12 +69,12 @@ public class Login extends AppCompatActivity {
             }
             firebaseAuth.signInWithEmailAndPassword(email_, password_)
                     .addOnSuccessListener(authResult -> {
-                        Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(Login.this, Home.class));
+                        Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginActivity.this, Home.class));
                         finish();
                     }).addOnFailureListener(e -> {
                         progressBar.setVisibility(View.INVISIBLE);
-                        Toast.makeText(Login.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     });
         });
     }
@@ -90,12 +88,12 @@ public class Login extends AppCompatActivity {
     }
 
     public void logintoreg(View view) {
-        startActivity(new Intent(Login.this, MainActivity.class));
+        startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
     }
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
         builder.setTitle("Confirm exit").setMessage("Are you sure you want to exit?")
                 .setPositiveButton("Yes", (dialog, which) -> finish())
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss());

@@ -4,7 +4,7 @@
 
     <!-- View background color -->
     <solid
-        android:color="@color/transparentAsh">
+        android:color="@color/colorGreen">
 
     </solid>
 

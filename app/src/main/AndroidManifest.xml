@@ -9,19 +9,18 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_rounded_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".EditOtherInfo" />
         <activity android:name=".EditBloodInfo" />
         <activity android:name=".EditPersonalInfo" />
-        <activity android:name=".AfterDonarReg" />
+        <activity android:name=".AfterDonorReg" />
         <activity android:name=".Home" />
         <activity android:name=".AfterNotif" />
         <activity android:name=".Profile" />
         <activity android:name=".PasswordReset" />
-        <activity android:name=".Header" />
-        <activity android:name=".Login" />
+        <activity android:name=".LoginActivity" />
 
         <service
             android:name=".notification.MyFirebaseMessagingService"
@@ -33,11 +32,11 @@
         </service>
 
         <activity android:name=".Notification" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".DonarRegistration" />
-        <activity android:name=".Dicision" />
-        <activity android:name=".Otp" />
-        <activity android:name=".SplashScreen">
+        <activity android:name=".RegistrationActivity" />
+        <activity android:name=".DonorRegistration" />
+        <activity android:name=".Decision" />
+        <activity android:name=".VerificationActivity" />
+        <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

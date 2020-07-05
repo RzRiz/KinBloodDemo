@@ -8,7 +8,7 @@ import android.os.Handler;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class SplashScreen extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
@@ -21,11 +21,11 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
                 if (firebaseAuth.getCurrentUser() != null) {
-                    Intent intent = new Intent(SplashScreen.this, Home.class);
+                    Intent intent = new Intent(SplashScreenActivity.this, Home.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 } else {
-                    Intent intent = new Intent(SplashScreen.this, Login.class);
+                    Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
