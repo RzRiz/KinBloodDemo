@@ -21,8 +21,10 @@
             android:id="@+id/et_otp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:hint="OTP"
-            android:gravity="center" />
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
