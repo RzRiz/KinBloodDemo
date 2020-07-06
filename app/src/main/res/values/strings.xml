@@ -3,4 +3,6 @@
     <string name="app_name">Kin Blood Demo</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_after_notif_map">Map</string>
+    <string name="title_activity_donor_map">Map</string>
 </resources>

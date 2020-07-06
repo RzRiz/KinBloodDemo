@@ -133,7 +133,7 @@ public class Notification extends AppCompatActivity {
                     if (response.body().success != 1) {
                         Toast.makeText(Notification.this, "Failed to send request", Toast.LENGTH_SHORT).show();
                     } else {
-                        startActivity(new Intent(Notification.this, AfterNotif.class));
+                        startActivity(new Intent(Notification.this, AfterNotifMap.class));
                         finish();
                     }
                 }
