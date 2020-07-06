@@ -33,7 +33,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="5"
-                    android:src="@drawable/ic_logo"
+                    android:src="@drawable/app_logo"
                     android:layout_marginTop="10dp"/>
 
                 <TextView
@@ -197,35 +197,79 @@
             </LinearLayout>
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_arrow_undo"
+            android:drawableTint="@color/colorPrimary"
+            android:layout_marginTop="20dp"
+            android:padding="10dp"
+            android:layout_gravity="end"/>
+
     </com.google.android.material.navigation.NavigationView>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorAsh">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_width="match_parent">
 
             <androidx.appcompat.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/toolbar"
-                android:background="#FF0000"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:title="KIN Blood" />
+                android:layout_height="?attr/actionBarSize"
+                android:layout_width="match_parent"
+                android:background="@color/colorYellowWhite"
+                android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Total donar"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/app_name"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="30sp"
+                    android:drawableStart="@drawable/ic_app_logo_40dp" />
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="A+ Donar"/>
-        </LinearLayout>
-    </ScrollView>
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total donor"
+                        android:textSize="25sp"
+                        android:textColor="@color/colorWhite"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="A+ Donor"
+                        android:textSize="25sp"
+                        android:textColor="@color/colorWhite"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

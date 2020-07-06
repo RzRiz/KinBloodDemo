@@ -1,6 +1,6 @@
 package com.sust.kinblooddemo;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,20 +8,19 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Objects;
 
 public class Home extends AppCompatActivity{
 
@@ -31,6 +30,7 @@ public class Home extends AppCompatActivity{
 
     private DrawerLayout drawerLayout;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +51,7 @@ public class Home extends AppCompatActivity{
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        TextView arrow = findViewById(R.id.tv_arrow);
         TextView name = findViewById(R.id.tv_name);
         TextView email = findViewById(R.id.tv_email);
         TextView home = findViewById(R.id.tv_home);
@@ -63,94 +64,60 @@ public class Home extends AppCompatActivity{
         TextView rate = findViewById(R.id.tv_rate);
         TextView logOut = findViewById(R.id.tv_log_out);
 
-        DOCUMENT_REFERENCE.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    name.setText(document.get("fullName").toString());
+        DOCUMENT_REFERENCE.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document != null && document.exists()){
+                    name.setText(Objects.requireNonNull(document.get("fullName")).toString());
+                    email.setText(Objects.requireNonNull(document.get("email")).toString());
+
                 }
             }
         });
 
-        email.setText(FIREBASE_USER.getEmail());
+        arrow.setOnClickListener(view -> drawerLayout.closeDrawer(GravityCompat.START));
 
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawerLayout.closeDrawer(GravityCompat.START);
-            }
+        home.setOnClickListener(view -> drawerLayout.closeDrawer(GravityCompat.START));
+
+        needDonor.setOnClickListener(view -> {
+            startActivity(new Intent(Home.this, Notification.class));
+            drawerLayout.closeDrawer(GravityCompat.START);
         });
 
-        needDonor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(Home.this, Notification.class));
-                drawerLayout.closeDrawer(GravityCompat.START);
-            }
+        becomeDonor.setOnClickListener(view -> {
+            DOCUMENT_REFERENCE
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                if (Objects.equals(documentSnapshot.getString("donorStatus"), "negative")) {
+                    startActivity(new Intent(Home.this, DonorRegistration.class));
+                } else {
+                    Toast.makeText(Home.this, "You are already a donor", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(e -> Toast.makeText(Home.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+            drawerLayout.closeDrawer(GravityCompat.START);
         });
 
-        becomeDonor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DOCUMENT_REFERENCE
-                        .get().addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.getString("donorStatus").equals("negative")) {
-                        startActivity(new Intent(Home.this, DonorRegistration.class));
-                    } else {
-                        Toast.makeText(Home.this, "You are already a donor", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(e -> Toast.makeText(Home.this, e.getMessage(), Toast.LENGTH_SHORT).show());
-                drawerLayout.closeDrawer(GravityCompat.START);
-            }
+        request.setOnClickListener(view -> {
+            startActivity(new Intent(Home.this, AfterNotif.class));
+            drawerLayout.closeDrawer(GravityCompat.START);
         });
 
-        request.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(Home.this, AfterNotif.class));
-                drawerLayout.closeDrawer(GravityCompat.START);
-            }
+        profile.setOnClickListener(view -> {
+            startActivity(new Intent(Home.this, Profile.class));
+            drawerLayout.closeDrawer(GravityCompat.START);
         });
 
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(Home.this, Profile.class));
-                drawerLayout.closeDrawer(GravityCompat.START);
-            }
-        });
+        settings.setOnClickListener(view -> drawerLayout.closeDrawer(GravityCompat.START));
 
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawerLayout.closeDrawer(GravityCompat.START);
-            }
-        });
+        about.setOnClickListener(view -> drawerLayout.closeDrawer(GravityCompat.START));
 
-        about.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawerLayout.closeDrawer(GravityCompat.START);
-            }
-        });
+        rate.setOnClickListener(view -> drawerLayout.closeDrawer(GravityCompat.START));
 
-        rate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawerLayout.closeDrawer(GravityCompat.START);
-            }
-        });
-
-        logOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                Toast.makeText(Home.this, "Signed out successfully", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(Home.this, LoginActivity.class));
-                finish();
-                drawerLayout.closeDrawer(GravityCompat.START);
-            }
+        logOut.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            Toast.makeText(Home.this, "Signed out successfully", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(Home.this, LoginActivity.class));
+            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         });
     }
 

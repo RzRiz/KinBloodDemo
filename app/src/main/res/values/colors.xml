@@ -2,12 +2,12 @@
 <resources>
     <color name="colorPrimary">#BA2025</color>
     <color name="colorPrimaryDark">#901616</color>
-    <color name="colorAccent">#EE3535</color>
+    <color name="colorAccent">#D32F2F</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
     <color name="colorAsh">#333333</color>
     <color name="colorAshWhite">#DDDDDD</color>
-    <color name="colorTransparentWhite">#7FFFFFFF</color>
+    <color name="colorTransparentWhite">#BFFFFFFF</color>
     <color name="colorTransparentBlack">#7F000000</color>
     <color name="colorTransparentAsh">#7F333333</color>
     <color name="colorYellowWhite">#EEF4DC</color>

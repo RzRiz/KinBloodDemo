@@ -3,23 +3,33 @@ package com.sust.kinblooddemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class RegistrationActivity extends AppCompatActivity {
 
+    private Dialog toastMessageDialog;
     private TextInputLayout password, confirmPassword;
     private EditText fullName, phoneNumber, email;
     private String full_Name, email_, password_, confirm_Password;
@@ -29,6 +39,8 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
+        toastMessageDialog = new Dialog(RegistrationActivity.this);
 
         fullName = findViewById(R.id.et_fullname);
         phoneNumber = findViewById(R.id.et_phoneNumber);
@@ -40,32 +52,35 @@ public class RegistrationActivity extends AppCompatActivity {
         fullName.addTextChangedListener(textWatcher);
         phoneNumber.addTextChangedListener(textWatcher);
         email.addTextChangedListener(textWatcher);
-        password.getEditText().addTextChangedListener(textWatcher);
-        confirmPassword.getEditText().addTextChangedListener(textWatcher);
-
+        Objects.requireNonNull(password.getEditText()).addTextChangedListener(textWatcher);
+        Objects.requireNonNull(confirmPassword.getEditText()).addTextChangedListener(textWatcher);
 
         buttonSignUp.setOnClickListener(v -> {
 
-            getData();
+            if (isOnline()){
+                getData();
 
-            if (!validate()) {
-                return;
-            }
+                if (!validate()) {
+                    return;
+                }
 
-            if (password_.equals(confirm_Password)) {
-                ArrayList<String> data = new ArrayList<>();
+                if (password_.equals(confirm_Password)) {
+                    ArrayList<String> data = new ArrayList<>();
 
-                data.add(full_Name);
-                data.add(phone_Number.toString());
-                data.add(email_);
-                data.add(password_);
+                    data.add(full_Name);
+                    data.add(phone_Number.toString());
+                    data.add(email_);
+                    data.add(password_);
 
-                Intent intent = new Intent(RegistrationActivity.this, VerificationActivity.class);
-                intent.putStringArrayListExtra("data", data);
-                startActivity(intent);
+                    Intent intent = new Intent(RegistrationActivity.this, VerificationActivity.class);
+                    intent.putStringArrayListExtra("data", data);
+                    startActivity(intent);
 
+                } else {
+                    Toast.makeText(RegistrationActivity.this, "Passwords do not match", Toast.LENGTH_LONG).show();
+                }
             } else {
-                Toast.makeText(RegistrationActivity.this, "Passwords do not match", Toast.LENGTH_LONG).show();
+                showToastMessage("No Internet Connection!");
             }
         });
     }
@@ -143,8 +158,8 @@ public class RegistrationActivity extends AppCompatActivity {
         full_Name = fullName.getText().toString().trim();
         phone_Number = new StringBuilder(phoneNumber.getText().toString().trim());
         email_ = email.getText().toString().trim();
-        password_ = password.getEditText().getText().toString().trim();
-        confirm_Password = confirmPassword.getEditText().getText().toString().trim();
+        password_ = Objects.requireNonNull(password.getEditText()).getText().toString().trim();
+        confirm_Password = Objects.requireNonNull(confirmPassword.getEditText()).getText().toString().trim();
     }
 
     private TextWatcher textWatcher = new TextWatcher() {
@@ -170,5 +185,25 @@ public class RegistrationActivity extends AppCompatActivity {
 
     public void signuptologin(View view){
         finish();
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm != null ? cm.getActiveNetworkInfo() : null;
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    private void showToastMessage(final String message) {
+        toastMessageDialog.setContentView(R.layout.item_toast_message);
+        toastMessageDialog.setCanceledOnTouchOutside(true);
+
+        TextView toast_TextView = toastMessageDialog.findViewById(R.id.item_toast_message_toast_TextView);
+        toast_TextView.setText(message);
+
+        toastMessageDialog.show();
+        Objects.requireNonNull(toastMessageDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        new Handler().postDelayed(() -> toastMessageDialog.cancel(), 5000);
     }
 }

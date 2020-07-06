@@ -19,6 +19,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
@@ -39,9 +40,9 @@ public class VerificationActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         Button buttonVerify = findViewById(R.id.btn_verify);
 
-
         data = getIntent().getStringArrayListExtra("data");
 
+        assert data != null;
         sendVerification(data.get(1));
 
         buttonVerify.setOnClickListener(v -> verifyCode(editTextOtp.getText().toString().trim()));
@@ -88,7 +89,7 @@ public class VerificationActivity extends AppCompatActivity {
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         final AuthCredential authCredential = EmailAuthProvider.getCredential(data.get(2), data.get(3));
         firebaseAuth.signInWithCredential(credential)
-                .addOnSuccessListener(authResult -> firebaseAuth.getCurrentUser().linkWithCredential(authCredential)
+                .addOnSuccessListener(authResult -> Objects.requireNonNull(firebaseAuth.getCurrentUser()).linkWithCredential(authCredential)
                         .addOnSuccessListener(authResult1 -> {
                             SignupHelper signupHelper = new SignupHelper(data.get(0),data.get(1),data.get(2),data.get(3), "negative", 0, "app");
                             FirebaseFirestore.getInstance().collection("Users").document(firebaseAuth.getCurrentUser().getUid()).set(signupHelper)
@@ -110,10 +111,5 @@ public class VerificationActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             Toast.makeText(VerificationActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
-    }
-
-    @Override
-    public void onBackPressed() {
-
     }
 }
