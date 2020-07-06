@@ -22,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
-public class Home extends AppCompatActivity{
+public class HomeActivity extends AppCompatActivity{
 
     public static  FirebaseAuth FIREBASE_AUTH;
     public static FirebaseUser FIREBASE_USER;
@@ -80,7 +80,7 @@ public class Home extends AppCompatActivity{
         home.setOnClickListener(view -> drawerLayout.closeDrawer(GravityCompat.START));
 
         needDonor.setOnClickListener(view -> {
-            startActivity(new Intent(Home.this, Notification.class));
+            startActivity(new Intent(HomeActivity.this, NotificationActivity.class));
             drawerLayout.closeDrawer(GravityCompat.START);
         });
 
@@ -88,21 +88,21 @@ public class Home extends AppCompatActivity{
             DOCUMENT_REFERENCE
                     .get().addOnSuccessListener(documentSnapshot -> {
                 if (Objects.equals(documentSnapshot.getString("donorStatus"), "negative")) {
-                    startActivity(new Intent(Home.this, DonorRegistration.class));
+                    startActivity(new Intent(HomeActivity.this, DonorRegistrationActivity.class));
                 } else {
-                    Toast.makeText(Home.this, "You are already a donor", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomeActivity.this, "You are already a donor", Toast.LENGTH_SHORT).show();
                 }
-            }).addOnFailureListener(e -> Toast.makeText(Home.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+            }).addOnFailureListener(e -> Toast.makeText(HomeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
             drawerLayout.closeDrawer(GravityCompat.START);
         });
 
         request.setOnClickListener(view -> {
-            startActivity(new Intent(Home.this, AfterNotifMap.class));
+            startActivity(new Intent(HomeActivity.this, AfterNotifMap.class));
             drawerLayout.closeDrawer(GravityCompat.START);
         });
 
         profile.setOnClickListener(view -> {
-            startActivity(new Intent(Home.this, Profile.class));
+            startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
             drawerLayout.closeDrawer(GravityCompat.START);
         });
 
@@ -114,8 +114,8 @@ public class Home extends AppCompatActivity{
 
         logOut.setOnClickListener(view -> {
             FirebaseAuth.getInstance().signOut();
-            Toast.makeText(Home.this, "Signed out successfully", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(Home.this, LoginActivity.class));
+            Toast.makeText(HomeActivity.this, "Signed out successfully", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
             finish();
             drawerLayout.closeDrawer(GravityCompat.START);
         });
@@ -126,12 +126,16 @@ public class Home extends AppCompatActivity{
         if (drawerLayout.isDrawerOpen(GravityCompat.START)){
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this);
-            builder.setTitle("Confirm exit").setMessage("Are you sure you want to exit?")
-                    .setPositiveButton("Yes", (dialog, which) -> finish())
-                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss());
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+            if(isTaskRoot()){
+                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                builder.setTitle("Confirm exit").setMessage("Are you sure you want to exit?")
+                        .setPositiveButton("Yes", (dialog, which) -> finish())
+                        .setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 }

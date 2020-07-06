@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,7 +53,7 @@ public class EditOtherInfo extends AppCompatActivity implements View.OnClickList
             else {
                 Map<String, Object> occupation = new HashMap<>();
                 occupation.put("occupation", occupation_);
-                Home.DOCUMENT_REFERENCE
+                HomeActivity.DOCUMENT_REFERENCE
                         .update(occupation).addOnSuccessListener(aVoid -> {
                     Toast.makeText(EditOtherInfo.this, "Occupation update successful", Toast.LENGTH_SHORT).show();
                     data.add(0, occupation_);
@@ -70,7 +69,7 @@ public class EditOtherInfo extends AppCompatActivity implements View.OnClickList
             else {
                 Map<String, Object> institute = new HashMap<>();
                 institute.put("institute", institute_);
-                Home.DOCUMENT_REFERENCE
+                HomeActivity.DOCUMENT_REFERENCE
                         .update(institute).addOnSuccessListener(aVoid -> {
                     Toast.makeText(EditOtherInfo.this, "Institute update successful", Toast.LENGTH_LONG).show();
                     data.add(1, institute_);
@@ -86,7 +85,7 @@ public class EditOtherInfo extends AppCompatActivity implements View.OnClickList
             else {
                 Map<String, Object> address = new HashMap<>();
                 address.put("address", currentAddress_);
-                Home.DOCUMENT_REFERENCE
+                HomeActivity.DOCUMENT_REFERENCE
                         .update(address).addOnSuccessListener(aVoid -> {
                     Toast.makeText(EditOtherInfo.this, "Current address update successful", Toast.LENGTH_LONG).show();
                     data.add(2, currentAddress_);
@@ -102,9 +101,9 @@ public class EditOtherInfo extends AppCompatActivity implements View.OnClickList
             else {
                 Map<String, Object> homeDistrict = new HashMap<>();
                 homeDistrict.put("homeDistrict", homeDistrict_);
-                Home.DOCUMENT_REFERENCE
+                HomeActivity.DOCUMENT_REFERENCE
                         .update(homeDistrict).addOnSuccessListener(aVoid -> {
-                    Toast.makeText(EditOtherInfo.this, "Home district update successful", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditOtherInfo.this, "HomeActivity district update successful", Toast.LENGTH_LONG).show();
                     data.add(3, homeDistrict_);
                 }).addOnFailureListener(e -> Toast.makeText(EditOtherInfo.this, e.getMessage(), Toast.LENGTH_LONG).show());
             }

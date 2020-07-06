@@ -7,7 +7,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class PasswordReset extends AppCompatActivity {
+public class PasswordResetActivity extends AppCompatActivity {
 
     private EditText editText;
 
@@ -27,9 +27,9 @@ public class PasswordReset extends AppCompatActivity {
                 return;
             }
             FirebaseAuth.getInstance().sendPasswordResetEmail(email).addOnSuccessListener(aVoid -> {
-                Toast.makeText(PasswordReset.this, "Password reset link has been sent to the email", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PasswordResetActivity.this, "Password reset link has been sent to the email", Toast.LENGTH_SHORT).show();
                 finish();
-            }).addOnFailureListener(e -> Toast.makeText(PasswordReset.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+            }).addOnFailureListener(e -> Toast.makeText(PasswordResetActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
         });
     }
 }

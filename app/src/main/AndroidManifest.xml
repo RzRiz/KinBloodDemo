@@ -41,9 +41,9 @@
         <activity android:name=".EditBloodInfo" />
         <activity android:name=".EditPersonalInfo" />
         <activity android:name=".AfterDonorReg" />
-        <activity android:name=".Home" />
-        <activity android:name=".Profile" />
-        <activity android:name=".PasswordReset" />
+        <activity android:name=".HomeActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".PasswordResetActivity" />
         <activity android:name=".LoginActivity" />
 
         <service
@@ -55,9 +55,9 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Notification" />
+        <activity android:name=".NotificationActivity" />
         <activity android:name=".RegistrationActivity" />
-        <activity android:name=".DonorRegistration" />
+        <activity android:name=".DonorRegistrationActivity" />
         <activity android:name=".Decision" />
         <activity android:name=".VerificationActivity" />
         <activity android:name=".SplashScreenActivity">

@@ -90,7 +90,7 @@ public class EditPersonalInfo extends AppCompatActivity implements View.OnClickL
             } else {
                 Map<String, Object> name = new HashMap<>();
                 name.put("fullName", name_);
-                Home.DOCUMENT_REFERENCE
+                HomeActivity.DOCUMENT_REFERENCE
                         .update(name).addOnSuccessListener(aVoid -> {
                     Toast.makeText(EditPersonalInfo.this, "Name update successful", Toast.LENGTH_SHORT).show();
                     ara.add(0, name_);
@@ -134,12 +134,12 @@ public class EditPersonalInfo extends AppCompatActivity implements View.OnClickL
                 } else {
                     if (newPassword_.equals(confirmNewPassword_)) {
                         EmailAuthCredential credential = (EmailAuthCredential) EmailAuthProvider.getCredential(oldEmail_, oldPassword_);
-                        Home.FIREBASE_USER.reauthenticate(credential).addOnSuccessListener(authResult -> Home.FIREBASE_USER
+                        HomeActivity.FIREBASE_USER.reauthenticate(credential).addOnSuccessListener(authResult -> HomeActivity.FIREBASE_USER
                                 .updatePassword(newPassword_)
                                 .addOnSuccessListener(aVoid -> {
                                     Map<String, Object> password = new HashMap<>();
                                     password.put("password", newPassword_);
-                                    Home.DOCUMENT_REFERENCE
+                                    HomeActivity.DOCUMENT_REFERENCE
                                             .update(password)
                                             .addOnSuccessListener(aVoid1 -> {
                                                 Toast.makeText(EditPersonalInfo.this, "Password update successful", Toast.LENGTH_LONG).show();
@@ -233,12 +233,12 @@ public class EditPersonalInfo extends AppCompatActivity implements View.OnClickL
     private void verifyCode(String codeByUser) {
         PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(verificationId_, codeByUser);
         EmailAuthCredential emailAuthCredential = (EmailAuthCredential) EmailAuthProvider.getCredential(oldEmail_, password_);
-        Home.FIREBASE_USER.reauthenticate(emailAuthCredential).addOnSuccessListener(aVoid -> Home.FIREBASE_USER.updatePhoneNumber(phoneAuthCredential).addOnSuccessListener(aVoid1 -> {
+        HomeActivity.FIREBASE_USER.reauthenticate(emailAuthCredential).addOnSuccessListener(aVoid -> HomeActivity.FIREBASE_USER.updatePhoneNumber(phoneAuthCredential).addOnSuccessListener(aVoid1 -> {
 
             Map<String, Object> phoneNumber = new HashMap<>();
             phoneNumber.put("phoneNumber", newPhoneNumber_.toString());
 
-            Home.DOCUMENT_REFERENCE
+            HomeActivity.DOCUMENT_REFERENCE
                     .update(phoneNumber)
                     .addOnSuccessListener(aVoid11 -> {
                         Toast.makeText(EditPersonalInfo.this, "Phone number update successful", Toast.LENGTH_SHORT).show();
@@ -310,10 +310,10 @@ public class EditPersonalInfo extends AppCompatActivity implements View.OnClickL
 
     public void startEmailUpdatingProcess() {
         EmailAuthCredential credential = (EmailAuthCredential) EmailAuthProvider.getCredential(oldEmail_, password_);
-        Home.FIREBASE_USER.reauthenticate(credential).addOnSuccessListener(aVoid -> Home.FIREBASE_USER.updateEmail(newEmail_).addOnSuccessListener(aVoid1 -> {
+        HomeActivity.FIREBASE_USER.reauthenticate(credential).addOnSuccessListener(aVoid -> HomeActivity.FIREBASE_USER.updateEmail(newEmail_).addOnSuccessListener(aVoid1 -> {
             Map<String, Object> email = new HashMap<>();
             email.put("email", newEmail_);
-            Home.DOCUMENT_REFERENCE
+            HomeActivity.DOCUMENT_REFERENCE
                     .update(email).addOnSuccessListener(aVoid11 -> {
                 Toast.makeText(EditPersonalInfo.this, "Email update successful", Toast.LENGTH_LONG).show();
                 ara.add(2, newEmail_);

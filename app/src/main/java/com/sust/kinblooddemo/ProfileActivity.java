@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 
-public class Profile extends AppCompatActivity implements View.OnClickListener {
+public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView fullName, email, phoneNumber, currentAddress, homeDistrict, occupation, institute, donateTimes, birthDate, gender, bloodGroup, lastDonated;
     private EditText password;
@@ -49,7 +49,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
         editBloodInfo.setOnClickListener(this);
         editOtherInfo.setOnClickListener(this);
 
-        Home.DOCUMENT_REFERENCE
+        HomeActivity.DOCUMENT_REFERENCE
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     donorStatus_ = documentSnapshot.getString("donorStatus");
@@ -89,13 +89,13 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                         donateTimes.setText(donateTimes_);
                         lastDonated.setText(lastDonated_);
                     }
-                }).addOnFailureListener(e -> Toast.makeText(Profile.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+                }).addOnFailureListener(e -> Toast.makeText(ProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.tv_edit_personal_info) {
-            Intent intent = new Intent(Profile.this, EditPersonalInfo.class);
+            Intent intent = new Intent(ProfileActivity.this, EditPersonalInfo.class);
             intent.putExtra("oldEmail", email_);
             startActivityForResult(intent, 1);
         }
@@ -105,7 +105,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                 Toast.makeText(this, "You have to be a donor to edit this field", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Intent intent = new Intent(Profile.this, EditBloodInfo.class);
+            Intent intent = new Intent(ProfileActivity.this, EditBloodInfo.class);
             intent.putExtra("oldLastDonated", lastDonated_);
             startActivityForResult(intent, 2);
         }
@@ -115,7 +115,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener {
                 Toast.makeText(this, "You have to be a donor to edit this field", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Intent intent = new Intent(Profile.this, EditOtherInfo.class);
+            Intent intent = new Intent(ProfileActivity.this, EditOtherInfo.class);
             intent.putExtra("oldBirthDay", birthDate_);
             startActivityForResult(intent, 3);
         }

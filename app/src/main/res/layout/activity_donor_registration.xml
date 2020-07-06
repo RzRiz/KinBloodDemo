@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_marginRight="20dp"
     android:layout_marginLeft="20dp"
-    tools:context=".DonorRegistration">
+    tools:context=".DonorRegistrationActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

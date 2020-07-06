@@ -80,7 +80,7 @@ public class EditBloodInfo extends AppCompatActivity implements View.OnClickList
             } else {
                 if (checkId == R.id.rb_donate_negative){
                     DonationInfoHelper donationInfoHelper = new DonationInfoHelper(0, 0, 0, 0);
-                    Home.DOCUMENT_REFERENCE
+                    HomeActivity.DOCUMENT_REFERENCE
                             .set(donationInfoHelper, SetOptions.merge())
                             .addOnSuccessListener(aVoid -> Toast.makeText(EditBloodInfo.this, "Donation information update successful", Toast.LENGTH_SHORT).show())
                             .addOnFailureListener(e -> Toast.makeText(EditBloodInfo.this, e.getMessage(), Toast.LENGTH_LONG).show());
@@ -101,7 +101,7 @@ public class EditBloodInfo extends AppCompatActivity implements View.OnClickList
                     else {
                         int timesdonated = Integer.parseInt(timesDonated_);
                         DonationInfoHelper donationInfoHelper = new DonationInfoHelper(dDay, dMonth, dYear, timesdonated);
-                        Home.DOCUMENT_REFERENCE
+                        HomeActivity.DOCUMENT_REFERENCE
                                 .set(donationInfoHelper, SetOptions.merge()).addOnSuccessListener(aVoid -> {
                             Toast.makeText(EditBloodInfo.this, "Donation information update successful", Toast.LENGTH_SHORT).show();
                             date = dDay + " / " + dMonth + " / " + dYear;
@@ -125,12 +125,12 @@ public class EditBloodInfo extends AppCompatActivity implements View.OnClickList
     @Override
     public void onBackPressed() {
         if (checkId == R.id.rb_donate_negative){
-            Intent intent = new Intent(EditBloodInfo.this, Profile.class);
+            Intent intent = new Intent(EditBloodInfo.this, ProfileActivity.class);
             intent.putExtra("donationInfo", "negative");
             setResult(2, intent);
         }
         else {
-            Intent intent = new Intent(EditBloodInfo.this, Profile.class);
+            Intent intent = new Intent(EditBloodInfo.this, ProfileActivity.class);
             intent.putExtra("newLastDonated", date);
             intent.putExtra("newDonatetimes", timesDonated_);
             setResult(3, intent);

@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_login);
         progressBar.setVisibility(View.INVISIBLE);
 
-        forgotPassword.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, PasswordReset.class)));
+        forgotPassword.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, PasswordResetActivity.class)));
 
         login.setOnClickListener(v -> {
 
@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                 firebaseAuth.signInWithEmailAndPassword(email_, password_)
                         .addOnSuccessListener(authResult -> {
                             Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(LoginActivity.this, Home.class));
+                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                             finish();
                         }).addOnFailureListener(e -> {
                     progressBar.setVisibility(View.INVISIBLE);
@@ -118,12 +118,16 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-        builder.setTitle("Confirm exit").setMessage("Are you sure you want to exit?")
-                .setPositiveButton("Yes", (dialog, which) -> finish())
-                .setNegativeButton("No", (dialog, which) -> dialog.dismiss());
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+        if (isTaskRoot()){
+            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+            builder.setTitle("Confirm exit").setMessage("Are you sure you want to exit?")
+                    .setPositiveButton("Yes", (dialog, which) -> finish())
+                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     public boolean isOnline() {

@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorAsh"
     android:orientation="vertical"
-    tools:context=".Notification">
+    tools:context=".NotificationActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_height="wrap_content"
@@ -16,11 +16,20 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:background="@color/colorYellowWhite"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <ImageView
+                android:id="@+id/iv_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_home"
+                android:tint="@color/colorPrimary"
+                android:padding="10dp"
+                android:layout_marginEnd="10dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -29,148 +38,120 @@
                 android:text="@string/app_name"
                 android:textColor="@color/colorBlack"
                 android:textSize="30sp"
-                android:drawableStart="@drawable/ic_app_logo_40dp" />
+                android:drawableStart="@drawable/ic_app_logo_40dp"
+                android:paddingHorizontal="10dp"/>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Required Blood Group"
-            android:textColor="@color/colorWhite"
-            android:textSize="30sp" />
-
-        <com.hitomi.cmlibrary.CircleMenu
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center"/>
-
-        <RadioGroup
-            android:id="@+id/rgPositiveN"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:paddingVertical="20dp">
 
-            <RadioButton
-                android:id="@+id/rbApositiveN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="A+"
-                android:textSize="20sp" />
-
-            <RadioButton
-                android:id="@+id/rbBpositiveN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="B+"
-                android:textSize="20sp" />
-
-            <RadioButton
-                android:id="@+id/rbABpositiveN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="AB+"
-                android:textSize="20sp" />
-
-            <RadioButton
-                android:id="@+id/rbOpositiveN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="O+"
-                android:textSize="20sp" />
-
-
-        </RadioGroup>
-
-        <RadioGroup
-            android:id="@+id/rgNegetiveN"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rbAnegetiveN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="A-"
-                android:textSize="20sp" />
-
-            <RadioButton
-                android:id="@+id/rbBnegetiveN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="B-"
-                android:textSize="20sp" />
-
-            <RadioButton
-                android:id="@+id/rbABnegetiveN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="AB-"
-                android:textSize="20sp" />
-
-            <RadioButton
-                android:id="@+id/rbOnegetiveN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="O-"
-                android:textSize="20sp" />
-        </RadioGroup>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_hospital"
+            <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Hospital name" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="Required Blood Group"
+                android:textColor="@color/colorWhite"
+                android:textSize="25sp"
+                android:layout_marginHorizontal="20dp" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            <com.hitomi.cmlibrary.CircleMenu
+                android:id="@+id/circleMenu"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_gravity="center" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_condition"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Patient condition" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="horizontal"
+                android:gravity="center">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Blood Group: "
+                    android:textColor="@color/colorWhite"
+                    android:textSize="25sp" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_noOfBags"
+                <TextView
+                    android:id="@+id/tv_blood"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="N/A"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="25sp" />
+
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="No of Bags"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginHorizontal="40dp"
+                android:theme="@style/TextInputLayoutAppearance">
 
-        <Button
-            android:id="@+id/btn_sendNotif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="send request" />
-    </LinearLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_hospital"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="Hospital name"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                android:theme="@style/TextInputLayoutAppearance">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_condition"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="Patient condition"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                android:theme="@style/TextInputLayoutAppearance">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_noOfBags"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="No of Bags"
+                    android:inputType="number"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btn_sendNotif"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/primary_rounded_rectangle"
+                android:text="send request"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhite"
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="50dp" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
