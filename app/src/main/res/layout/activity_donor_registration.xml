@@ -43,7 +43,50 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <LinearLayout
+        android:id="@+id/adr_linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_blood_happy_emoji"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Congratulations!"
+            android:textSize="25sp"
+            android:textColor="@color/colorWhite"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You have already registered as a blood donor."
+            android:textSize="20sp"
+            android:textColor="@color/colorYellowWhite"
+            android:gravity="center"
+            android:layout_marginHorizontal="30dp" />
+
+        <Button
+            android:id="@+id/btn_cancel_registration"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@drawable/primary_rounded_rectangle"
+            android:text="Cancel Registration"
+            android:textSize="20sp"
+            android:textColor="@color/colorWhite"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="50dp" />
+    </LinearLayout>
+
     <ScrollView
+        android:id="@+id/adr_scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

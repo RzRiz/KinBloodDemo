@@ -87,11 +87,13 @@ public class HomeActivity extends AppCompatActivity{
         becomeDonor.setOnClickListener(view -> {
             DOCUMENT_REFERENCE
                     .get().addOnSuccessListener(documentSnapshot -> {
+                Intent intent = new Intent(HomeActivity.this, DonorRegistrationActivity.class);
                 if (Objects.equals(documentSnapshot.getString("donorStatus"), "negative")) {
-                    startActivity(new Intent(HomeActivity.this, DonorRegistrationActivity.class));
+                    intent.putExtra("donorStatus", "negative");
                 } else {
-                    Toast.makeText(HomeActivity.this, "You are already a donor", Toast.LENGTH_SHORT).show();
+                    intent.putExtra("donorStatus", "positive");
                 }
+                startActivity(intent);
             }).addOnFailureListener(e -> Toast.makeText(HomeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
             drawerLayout.closeDrawer(GravityCompat.START);
         });

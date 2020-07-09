@@ -33,14 +33,13 @@
 
         <activity
             android:name=".DonorMap"
-            android:label="@string/title_activity_donor_map"></activity>
+            android:label="@string/title_activity_donor_map" />
         <activity
             android:name=".AfterNotifMap"
             android:label="@string/title_activity_after_notif_map" />
         <activity android:name=".EditOtherInfo" />
         <activity android:name=".EditBloodInfo" />
         <activity android:name=".EditPersonalInfo" />
-        <activity android:name=".AfterDonorReg" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".PasswordResetActivity" />

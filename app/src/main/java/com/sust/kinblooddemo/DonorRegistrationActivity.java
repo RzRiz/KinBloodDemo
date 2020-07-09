@@ -17,8 +17,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,7 +33,9 @@ import java.util.Objects;
 
 public class DonorRegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Dialog toastMessageDialog;
+    private Dialog toastMessageDialog, toastMessageDialog2, toastMessageDialog3;
+    private LinearLayout linearLayout;
+    private ScrollView scrollView;
     private RadioGroup radioGroupGender, radioGroupDonatedBefore;
     private EditText currentAddress, homeDistrict, occupation, institute, donateTimes;
     private Button birthDay, lastDonated;
@@ -47,6 +51,11 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
         setContentView(R.layout.activity_donor_registration);
 
         toastMessageDialog = new Dialog(DonorRegistrationActivity.this);
+        toastMessageDialog2 = new Dialog(DonorRegistrationActivity.this);
+        toastMessageDialog3 = new Dialog(DonorRegistrationActivity.this);
+
+        linearLayout = findViewById(R.id.adr_linearLayout);
+        scrollView = findViewById(R.id.adr_scrollView);
 
         CircleMenu circleMenu = findViewById(R.id.circleMenu);
         radioGroupGender = findViewById(R.id.rgGender);
@@ -61,6 +70,23 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
         ImageView home= findViewById(R.id.iv_home2);
         TextView selectedBloodGroup = findViewById(R.id.tv_selectedBlood);
         Button register = findViewById(R.id.btn_register);
+        Button cancelRegistration = findViewById(R.id.btn_cancel_registration);
+
+        String donorStatus = getIntent().getStringExtra("donorStatus");
+
+        if (donorStatus != null) {
+            if (donorStatus.equals("positive")) {
+                scrollView.setVisibility(View.GONE);
+                linearLayout.setVisibility(View.VISIBLE);
+            } else if (donorStatus.equals("negative")) {
+                scrollView.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.GONE);
+            }
+        } else {
+            scrollView.setVisibility(View.VISIBLE);
+            linearLayout.setVisibility(View.GONE);
+        }
+
 
         home.setOnClickListener(view -> startActivity(new Intent(DonorRegistrationActivity.this, HomeActivity.class)));
 
@@ -80,6 +106,14 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
                     selectedBloodGroup.setText(blood_group);
                 });
 
+        cancelRegistration.setOnClickListener(view -> {
+            //Write the code for registration cancellation works here
+            //
+            //
+            scrollView.setVisibility(View.VISIBLE);
+            linearLayout.setVisibility(View.GONE);
+            showOopsMessage();
+        });
         birthDay.setOnClickListener(this);
         lastDonated.setOnClickListener(this);
         register.setOnClickListener(this);
@@ -204,11 +238,7 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
                 FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                 FirebaseFirestore.getInstance().collection("Users")
                         .document(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid())
-                        .set(registrationHelper, SetOptions.merge()).addOnSuccessListener(aVoid -> {
-                    Toast.makeText(DonorRegistrationActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(DonorRegistrationActivity.this, AfterDonorReg.class));
-                    finish();
-                }).addOnFailureListener(e -> Toast.makeText(DonorRegistrationActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+                        .set(registrationHelper, SetOptions.merge()).addOnSuccessListener(aVoid -> showCongratulationsMessage()).addOnFailureListener(e -> Toast.makeText(DonorRegistrationActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
             } else {
                 showToastMessage("No Internet Connection!");
             }
@@ -223,6 +253,36 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void showCongratulationsMessage() {
+        toastMessageDialog2.setContentView(R.layout.item_toast_message2);
+        toastMessageDialog2.setCanceledOnTouchOutside(false);
+
+        TextView continueButton = toastMessageDialog2.findViewById(R.id.btn_continue);
+
+        continueButton.setOnClickListener(view -> {
+            startActivity(new Intent(toastMessageDialog2.getOwnerActivity(), HomeActivity.class));
+            finish();
+        });
+
+        toastMessageDialog2.show();
+        Objects.requireNonNull(toastMessageDialog2.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    private void showOopsMessage() {
+        toastMessageDialog3.setContentView(R.layout.item_toast_message3);
+        toastMessageDialog3.setCanceledOnTouchOutside(false);
+
+        TextView continueButton = toastMessageDialog3.findViewById(R.id.btn_continue2);
+
+        continueButton.setOnClickListener(view -> {
+            startActivity(new Intent(toastMessageDialog2.getOwnerActivity(), HomeActivity.class));
+            finish();
+        });
+
+        toastMessageDialog3.show();
+        Objects.requireNonNull(toastMessageDialog3.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
     public boolean isOnline() {
