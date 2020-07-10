@@ -99,7 +99,7 @@ public class HomeActivity extends AppCompatActivity{
         });
 
         request.setOnClickListener(view -> {
-            startActivity(new Intent(HomeActivity.this, AfterNotifMap.class));
+            startActivity(new Intent(HomeActivity.this, AfterNotifTemp.class));
             drawerLayout.closeDrawer(GravityCompat.START);
         });
 

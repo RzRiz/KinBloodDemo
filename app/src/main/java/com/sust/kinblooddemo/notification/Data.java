@@ -1,16 +1,17 @@
 package com.sust.kinblooddemo.notification;
 
 public class Data {
-    private String bloodGroup, hospital, condition, noOfBags;
+    private String bloodGroup, hospital, condition, noOfBags, uid;
 
     public Data() {
     }
 
-    public Data(String bloodGroup, String hospital, String condition, String noOfBags) {
+    public Data(String bloodGroup, String hospital, String condition, String noOfBags, String uid) {
         this.bloodGroup = bloodGroup;
         this.hospital = hospital;
         this.condition = condition;
         this.noOfBags = noOfBags;
+        this.uid = uid;
     }
 
     public String getBloodGroup() {
@@ -43,5 +44,13 @@ public class Data {
 
     public void setNoOfBags(String noOfBags) {
         this.noOfBags = noOfBags;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

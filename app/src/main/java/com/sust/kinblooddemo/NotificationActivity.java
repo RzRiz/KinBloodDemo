@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -110,11 +111,11 @@ public class NotificationActivity extends AppCompatActivity {
                     return;
                 }
 
-                FirebaseDatabase.getInstance().getReference().child("Tokens").child("TzewxuRq0pYGf0ORmliUzruV8Qu1").child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                FirebaseDatabase.getInstance().getReference().child("Tokens").child("5OF7T9cyDHXfvvQor8P1weYZ1qw2").child("token").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         String userToken = dataSnapshot.getValue(String.class);
-                        sendNotifications(userToken, blood_group, hospital_, condition_, noOfBags_);
+                        sendNotifications(userToken, blood_group, hospital_, condition_, noOfBags_, FirebaseAuth.getInstance().getCurrentUser().getUid());
                     }
 
                     @Override
@@ -130,14 +131,14 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     private void updateToken() {
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( NotificationActivity.this, (OnSuccessListener<InstanceIdResult>) instanceIdResult -> refreshToken = instanceIdResult.getToken());
-
+        FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+        String refreshToken= FirebaseInstanceId.getInstance().getToken();
         Token token = new Token(refreshToken);
-        FirebaseDatabase.getInstance().getReference("Tokens").child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(token);
+        FirebaseDatabase.getInstance().getReference("Tokens").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
     }
 
-    public void sendNotifications(String userToken, String bloodGroup, String hospital, String condition, String noOfBags) {
-        Data data = new Data(bloodGroup, hospital, condition, noOfBags);
+    public void sendNotifications(String userToken, String bloodGroup, String hospital, String condition, String noOfBags, String uid) {
+        Data data = new Data(bloodGroup, hospital, condition, noOfBags, uid);
         NotificationSender sender = new NotificationSender(data, userToken);
         apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
             @Override
@@ -148,7 +149,7 @@ public class NotificationActivity extends AppCompatActivity {
                         if (response.body().success != 1) {
                             Toast.makeText(NotificationActivity.this, "Failed to send request", Toast.LENGTH_SHORT).show();
                         } else {
-                            startActivity(new Intent(NotificationActivity.this, AfterNotifMap.class));
+                            startActivity(new Intent(NotificationActivity.this, AfterNotifTemp.class));
                             finish();
                         }
                     }
