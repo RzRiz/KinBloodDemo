@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,6 +27,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.hitomi.cmlibrary.CircleMenu;
@@ -44,17 +48,27 @@ import retrofit2.Response;
 
 public class NotificationActivity extends AppCompatActivity {
 
+    private FirebaseAuth FIREBASE_AUTH;
+    private FirebaseUser FIREBASE_USER;
+    private String uid;
+    private DocumentReference DOCUMENT_REFERENCE;
+
     private Dialog toastMessageDialog;
     private int bG = 0;
     private APIService apiService;
     private EditText hospital, condition, noOfBags;
-    private String hospital_, condition_, noOfBags_, blood_group, refreshToken;
+    private String hospital_, condition_, noOfBags_, blood_group;
     private String[] bloodGroups = {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+
+        FIREBASE_AUTH = FirebaseAuth.getInstance();
+        FIREBASE_USER = FIREBASE_AUTH.getCurrentUser();
+        uid = FIREBASE_USER.getUid();
+        DOCUMENT_REFERENCE = FirebaseFirestore.getInstance().collection("Users").document(uid);
 
         toastMessageDialog = new Dialog(NotificationActivity.this);
 
@@ -115,9 +129,15 @@ public class NotificationActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         String userToken = dataSnapshot.getValue(String.class);
-                        sendNotifications(userToken, blood_group, hospital_, condition_, noOfBags_, FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        DOCUMENT_REFERENCE.get().addOnSuccessListener(documentSnapshot -> {
+                            SignupHelper signupHelper = documentSnapshot.toObject(SignupHelper.class);
+                            String fullName = signupHelper.getFullName();
+                            String phoneNumber = signupHelper.getPhoneNumber();
+                            sendNotifications(userToken, blood_group, hospital_, condition_, noOfBags_, uid, fullName, phoneNumber);
+                        }).addOnFailureListener(e -> {
+                            Toast.makeText(NotificationActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                     }
@@ -126,19 +146,17 @@ public class NotificationActivity extends AppCompatActivity {
                 showToastMessage("No Internet Connection!");
             }
         });
-
         updateToken();
     }
 
     private void updateToken() {
-        FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         String refreshToken= FirebaseInstanceId.getInstance().getToken();
         Token token = new Token(refreshToken);
-        FirebaseDatabase.getInstance().getReference("Tokens").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
+        FirebaseDatabase.getInstance().getReference("Tokens").child(uid).setValue(token);
     }
 
-    public void sendNotifications(String userToken, String bloodGroup, String hospital, String condition, String noOfBags, String uid) {
-        Data data = new Data(bloodGroup, hospital, condition, noOfBags, uid);
+    public void sendNotifications(String userToken, String bloodGroup, String hospital, String condition, String noOfBags, String uid, String fullName, String phoneNumber) {
+        Data data = new Data(bloodGroup, hospital, condition, noOfBags, uid, fullName, phoneNumber);
         NotificationSender sender = new NotificationSender(data, userToken);
         apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
             @Override
