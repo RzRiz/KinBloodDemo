@@ -74,7 +74,7 @@ public class NotificationActivity extends AppCompatActivity implements OnMapRead
     private String hospital_, condition_, noOfBags_, blood_group;
     private String[] bloodGroups = {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"};
     private GoogleMap mMap;
-    private CustomMapView customMapView;
+    private MapView mapView;
     private ScrollView scrollView;
 
     @Override
@@ -93,18 +93,11 @@ public class NotificationActivity extends AppCompatActivity implements OnMapRead
         hospital = findViewById(R.id.et_hospital);
         condition = findViewById(R.id.et_condition);
         noOfBags = findViewById(R.id.et_noOfBags);
-        customMapView = findViewById(R.id.mapView);
+        mapView = findViewById(R.id.mapView);
         scrollView = findViewById(R.id.scrollView_notif);
         ImageView home= findViewById(R.id.iv_home);
         TextView selectedBloodGroup = findViewById(R.id.tv_blood);
         Button send = findViewById(R.id.btn_sendNotif);
-
-        Bundle mapViewBundle = null;
-        if (savedInstanceState != null) {
-            mapViewBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
-        }
-        customMapView.onCreate(mapViewBundle);
-        customMapView.getMapAsync(this);
 
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
@@ -125,6 +118,13 @@ public class NotificationActivity extends AppCompatActivity implements OnMapRead
                     Toast.makeText(NotificationActivity.this, blood_group + " selected", Toast.LENGTH_LONG).show();
                     selectedBloodGroup.setText(blood_group);
                 });
+
+        Bundle mapViewBundle = null;
+        if (savedInstanceState != null) {
+            mapViewBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
+        }
+        mapView.onCreate(mapViewBundle);
+        mapView.getMapAsync(this);
 
         send.setOnClickListener(v -> {
             if (isOnline()){
@@ -248,43 +248,43 @@ public class NotificationActivity extends AppCompatActivity implements OnMapRead
             outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle);
         }
 
-        customMapView.onSaveInstanceState(mapViewBundle);
+        mapView.onSaveInstanceState(mapViewBundle);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        customMapView.onResume();
+        mapView.onResume();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        customMapView.onStart();
+        mapView.onStart();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        customMapView.onStop();
+        mapView.onStop();
     }
 
     @Override
     public void onPause() {
-        customMapView.onPause();
+        mapView.onPause();
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        customMapView.onDestroy();
+        mapView.onDestroy();
         super.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        customMapView.onLowMemory();
+        mapView.onLowMemory();
     }
 
     @Override
