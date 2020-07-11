@@ -12,13 +12,25 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,7 +58,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NotificationActivity extends AppCompatActivity {
+public class NotificationActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    public static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
 
     private FirebaseAuth FIREBASE_AUTH;
     private FirebaseUser FIREBASE_USER;
@@ -59,6 +73,9 @@ public class NotificationActivity extends AppCompatActivity {
     private EditText hospital, condition, noOfBags;
     private String hospital_, condition_, noOfBags_, blood_group;
     private String[] bloodGroups = {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"};
+    private GoogleMap mMap;
+    private CustomMapView customMapView;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +93,18 @@ public class NotificationActivity extends AppCompatActivity {
         hospital = findViewById(R.id.et_hospital);
         condition = findViewById(R.id.et_condition);
         noOfBags = findViewById(R.id.et_noOfBags);
+        customMapView = findViewById(R.id.mapView);
+        scrollView = findViewById(R.id.scrollView_notif);
         ImageView home= findViewById(R.id.iv_home);
         TextView selectedBloodGroup = findViewById(R.id.tv_blood);
         Button send = findViewById(R.id.btn_sendNotif);
+
+        Bundle mapViewBundle = null;
+        if (savedInstanceState != null) {
+            mapViewBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
+        }
+        customMapView.onCreate(mapViewBundle);
+        customMapView.getMapAsync(this);
 
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
@@ -199,5 +225,74 @@ public class NotificationActivity extends AppCompatActivity {
         Objects.requireNonNull(toastMessageDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         new Handler().postDelayed(() -> toastMessageDialog.cancel(), 5000);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        mMap = googleMap;
+
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        CameraUpdate location = CameraUpdateFactory.newLatLngZoom(sydney, 9.0f);
+        mMap.animateCamera(location);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Bundle mapViewBundle = outState.getBundle(MAPVIEW_BUNDLE_KEY);
+        if (mapViewBundle == null) {
+            mapViewBundle = new Bundle();
+            outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle);
+        }
+
+        customMapView.onSaveInstanceState(mapViewBundle);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        customMapView.onResume();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        customMapView.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        customMapView.onStop();
+    }
+
+    @Override
+    public void onPause() {
+        customMapView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        customMapView.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        customMapView.onLowMemory();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        /**
+         * Request all parents to relinquish the touch events
+         */
+        scrollView.requestDisallowInterceptTouchEvent(true);
+        return super.dispatchTouchEvent(ev);
     }
 }

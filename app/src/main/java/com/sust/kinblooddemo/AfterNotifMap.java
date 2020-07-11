@@ -21,7 +21,7 @@ public class AfterNotifMap extends FragmentActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_after_notif_map);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.map_after_notif);
         mapFragment.getMapAsync(this);
     }
 

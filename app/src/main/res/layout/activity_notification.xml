@@ -45,7 +45,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView_notif">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -98,6 +99,12 @@
                     android:textSize="25sp" />
 
             </LinearLayout>
+
+
+            <com.sust.kinblooddemo.CustomMapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="400dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
