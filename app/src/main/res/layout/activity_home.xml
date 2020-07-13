@@ -206,7 +206,6 @@
             android:layout_marginTop="20dp"
             android:padding="10dp"
             android:layout_gravity="end"/>
-
     </com.google.android.material.navigation.NavigationView>
 
     <LinearLayout

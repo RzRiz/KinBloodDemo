@@ -97,14 +97,13 @@
                     android:text="Not Selected"
                     android:textColor="@color/colorWhite"
                     android:textSize="25sp" />
-
             </LinearLayout>
-
 
             <com.google.android.gms.maps.MapView
                 android:id="@+id/mapView"
                 android:layout_width="match_parent"
-                android:layout_height="400dp" />
+                android:layout_height="400dp"
+                android:layout_margin="10dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"

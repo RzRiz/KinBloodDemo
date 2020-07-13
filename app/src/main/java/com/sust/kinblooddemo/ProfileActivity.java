@@ -14,7 +14,6 @@ import java.util.ArrayList;
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView fullName, email, phoneNumber, currentAddress, homeDistrict, occupation, institute, donateTimes, birthDate, gender, bloodGroup, lastDonated;
-    private EditText password;
     private String fullName_, email_, phoneNumber_, password_, currentAddress_, homeDistrict_, occupation_, institute_, donorStatus_, birthDate_, gender_, bloodGroup_, donateTimes_, lastDonated_;
     private SignupHelper signupHelper;
     private RegistrationHelper registrationHelper;
@@ -29,7 +28,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         fullName = findViewById(R.id.tv_edit_name);
         email = findViewById(R.id.tv_edit_email);
         phoneNumber = findViewById(R.id.tv_edit_phone_number);
-        password = findViewById(R.id.et_edit_password);
         currentAddress = findViewById(R.id.tv_edit_current_address);
         homeDistrict = findViewById(R.id.tv_edit_home_district);
         occupation = findViewById(R.id.tv_edit_occupation);
@@ -53,41 +51,45 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     donorStatus_ = documentSnapshot.getString("donorStatus");
-                    if (donorStatus_.equals("positive") || donorStatus_.equals("negative")) {
-                        signupHelper = documentSnapshot.toObject(SignupHelper.class);
-                        fullName_ = signupHelper.getFullName();
-                        email_ = signupHelper.getEmail();
-                        phoneNumber_ = signupHelper.getPhoneNumber();
-                        password_ = signupHelper.getPassword();
+                    if (donorStatus_ != null) {
+                        if (donorStatus_.equals("positive") || donorStatus_.equals("negative")) {
+                            signupHelper = documentSnapshot.toObject(SignupHelper.class);
+                            if (signupHelper != null) {
+                                fullName_ = signupHelper.getFullName();
+                                email_ = signupHelper.getEmail();
+                                phoneNumber_ = signupHelper.getPhoneNumber();
 
-                        fullName.setText(fullName_);
-                        email.setText(email_);
-                        phoneNumber.setText(phoneNumber_);
-                        password.setText(password_);
-                    }
-                    if (donorStatus_.equals("positive")) {
-                        registrationHelper = documentSnapshot.toObject(RegistrationHelper.class);
-                        currentAddress_ = registrationHelper.getCurrentAddress();
-                        homeDistrict_ = registrationHelper.getHomeDistrict();
-                        occupation_ = registrationHelper.getOccupation();
-                        institute_ = registrationHelper.getInstitute();
-                        int bDay = registrationHelper.getbDay(), bMonth = registrationHelper.getbMonth(), bYear = registrationHelper.getbYear();
-                        birthDate_ = bDay + " / " + bMonth + " / " + bYear;
-                        gender_ = registrationHelper.getGender();
-                        bloodGroup_ = registrationHelper.getBloodGroup();
-                        donateTimes_ = String.valueOf(registrationHelper.getDonateTimes());
-                        int dDay = registrationHelper.getdDay(), dMonth = registrationHelper.getdMonth(), dYear = registrationHelper.getdYear();
-                        lastDonated_ = dDay + " / " + dMonth + " / " + dYear;
+                                fullName.setText(fullName_);
+                                email.setText(email_);
+                                phoneNumber.setText(phoneNumber_);
+                            }
+                        }
+                        if (donorStatus_.equals("positive")) {
+                            registrationHelper = documentSnapshot.toObject(RegistrationHelper.class);
+                            if (registrationHelper != null) {
+                                currentAddress_ = registrationHelper.getCurrentAddress();
+                                homeDistrict_ = registrationHelper.getHomeDistrict();
+                                occupation_ = registrationHelper.getOccupation();
+                                institute_ = registrationHelper.getInstitute();
+                                int bDay = registrationHelper.getbDay(), bMonth = registrationHelper.getbMonth(), bYear = registrationHelper.getbYear();
+                                birthDate_ = bDay + " / " + bMonth + " / " + bYear;
+                                gender_ = registrationHelper.getGender();
+                                bloodGroup_ = registrationHelper.getBloodGroup();
+                                donateTimes_ = String.valueOf(registrationHelper.getDonateTimes());
+                                int dDay = registrationHelper.getdDay(), dMonth = registrationHelper.getdMonth(), dYear = registrationHelper.getdYear();
+                                lastDonated_ = dDay + " / " + dMonth + " / " + dYear;
 
-                        currentAddress.setText(currentAddress_);
-                        homeDistrict.setText(homeDistrict_);
-                        occupation.setText(occupation_);
-                        institute.setText(institute_);
-                        birthDate.setText(birthDate_);
-                        gender.setText(gender_);
-                        bloodGroup.setText(bloodGroup_);
-                        donateTimes.setText(donateTimes_);
-                        lastDonated.setText(lastDonated_);
+                                currentAddress.setText(currentAddress_);
+                                homeDistrict.setText(homeDistrict_);
+                                occupation.setText(occupation_);
+                                institute.setText(institute_);
+                                birthDate.setText(birthDate_);
+                                gender.setText(gender_);
+                                bloodGroup.setText(bloodGroup_);
+                                donateTimes.setText(donateTimes_);
+                                lastDonated.setText(lastDonated_);
+                            }
+                        }
                     }
                 }).addOnFailureListener(e -> Toast.makeText(ProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
     }
@@ -139,11 +141,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             if (!ara.get(2).equals("")){
                 email_ = ara.get(2);
                 email.setText(email_);
-            }
-            if (!ara.get(3).equals("")){
-                password_ = ara.get(3);
-                password.setText(password_);
-                password.setTransformationMethod(null);
             }
         }
         else if (resultCode == 2 && data != null){

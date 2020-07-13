@@ -1,5 +1,5 @@
 <resources>
-    <string name="edit"><u>edit</u></string>
+    <string name="edit"><u>Edit</u></string>
     <string name="app_name">Kin Blood Demo</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
