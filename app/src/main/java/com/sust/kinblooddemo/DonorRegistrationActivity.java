@@ -262,7 +262,6 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
         TextView continueButton = toastMessageDialog2.findViewById(R.id.btn_continue);
 
         continueButton.setOnClickListener(view -> {
-            startActivity(new Intent(toastMessageDialog2.getOwnerActivity(), HomeActivity.class));
             finish();
         });
 
@@ -277,7 +276,6 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
         TextView continueButton = toastMessageDialog3.findViewById(R.id.btn_continue2);
 
         continueButton.setOnClickListener(view -> {
-            startActivity(new Intent(toastMessageDialog2.getOwnerActivity(), HomeActivity.class));
             finish();
         });
 
