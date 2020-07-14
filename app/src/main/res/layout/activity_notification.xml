@@ -43,10 +43,9 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
+    <com.sust.kinblooddemo.CustomScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView_notif">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -99,28 +98,43 @@
                     android:textSize="25sp" />
             </LinearLayout>
 
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/mapView"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:layout_margin="10dp" />
-
-            <com.google.android.material.textfield.TextInputLayout
+            <TextView
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="40dp"
-                android:theme="@style/TextInputLayoutAppearance">
+                android:text="Selected Location:"
+                android:textSize="25sp"
+                android:textColor="#fff"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_hospital"
+            <TextView
+                android:id="@+id/selected_location"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Not Selected"
+                android:textSize="25sp"
+                android:textColor="#fff"/>
+
+            <fragment
+                android:id="@+id/frag_notif"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_margin="10dp">
+
+                <EditText
+                    android:id="@+id/map_search"
+                    android:padding="10dp"
+                    android:layout_margin="40dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:hint="Hospital name"
-                    android:inputType="textMultiLine"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="20sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="Hospital name or address"
+                    android:background="@color/cardview_light_background"
+                    android:drawableEnd="@drawable/ic_baseline_search_24"/>
+
+            </fragment>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -167,5 +181,5 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginHorizontal="50dp" />
         </LinearLayout>
-    </ScrollView>
+    </com.sust.kinblooddemo.CustomScrollView>
 </LinearLayout>

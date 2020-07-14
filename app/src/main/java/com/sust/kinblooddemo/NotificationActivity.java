@@ -1,18 +1,28 @@
 package com.sust.kinblooddemo;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.AttributeSet;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Button;
@@ -22,6 +32,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,6 +46,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -52,6 +69,10 @@ import com.sust.kinblooddemo.notification.MyResponse;
 import com.sust.kinblooddemo.notification.NotificationSender;
 import com.sust.kinblooddemo.notification.Token;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -60,48 +81,48 @@ import retrofit2.Response;
 
 public class NotificationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    public static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
 
-    private FirebaseAuth FIREBASE_AUTH;
-    private FirebaseUser FIREBASE_USER;
     private String uid;
     private DocumentReference DOCUMENT_REFERENCE;
 
-    private Dialog toastMessageDialog;
+    private Dialog toastMessageDialog, locationDialog, permanentDenyDialog;
     private int bG = 0;
     private APIService apiService;
-    private EditText hospital, condition, noOfBags;
-    private String hospital_, condition_, noOfBags_, blood_group;
+    private EditText condition, noOfBags;
+    private String locationName_, locationAddress_, condition_, noOfBags_, blood_group;
     private String[] bloodGroups = {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"};
     private GoogleMap mMap;
-    private MapView mapView;
-    private ScrollView scrollView;
+    private LatLng latLng;
+    private TextView locationAddress;
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
 
-        FIREBASE_AUTH = FirebaseAuth.getInstance();
-        FIREBASE_USER = FIREBASE_AUTH.getCurrentUser();
-        uid = FIREBASE_USER.getUid();
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DOCUMENT_REFERENCE = FirebaseFirestore.getInstance().collection("Users").document(uid);
 
         toastMessageDialog = new Dialog(NotificationActivity.this);
+        locationDialog = new Dialog(this);
+        permanentDenyDialog = new Dialog(this);
 
         CircleMenu circleMenu = findViewById(R.id.circleMenu);
-        hospital = findViewById(R.id.et_hospital);
+        EditText searchLocation = findViewById(R.id.map_search);
+        locationAddress = findViewById(R.id.selected_location);
         condition = findViewById(R.id.et_condition);
         noOfBags = findViewById(R.id.et_noOfBags);
-        mapView = findViewById(R.id.mapView);
-        scrollView = findViewById(R.id.scrollView_notif);
-        ImageView home= findViewById(R.id.iv_home);
+        ImageView home = findViewById(R.id.iv_home);
         TextView selectedBloodGroup = findViewById(R.id.tv_blood);
         Button send = findViewById(R.id.btn_sendNotif);
 
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
-        home.setOnClickListener(view -> startActivity(new Intent(NotificationActivity.this, HomeActivity.class)));
+        home.setOnClickListener(view -> {
+            startActivity(new Intent(NotificationActivity.this, HomeActivity.class));
+            finish();
+        });
 
         circleMenu.setMainMenu(Color.parseColor("#EEF4DC"), R.drawable.ic_blood, R.drawable.ic_app_logo_40dp)
                 .addSubMenu(Color.parseColor("#D32F2F"), R.drawable.a_positive)
@@ -119,21 +140,24 @@ public class NotificationActivity extends AppCompatActivity implements OnMapRead
                     selectedBloodGroup.setText(blood_group);
                 });
 
-        Bundle mapViewBundle = null;
-        if (savedInstanceState != null) {
-            mapViewBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
-        }
-        mapView.onCreate(mapViewBundle);
-        mapView.getMapAsync(this);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.frag_notif);
+        mapFragment.getMapAsync(this);
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        Places.initialize(getApplicationContext(), "AIzaSyDdC5d5BNuQ8vCFIMC_QjZtgm4DcCKhnqs");
+
+        searchLocation.setFocusable(false);
+        searchLocation.setOnClickListener(view -> {
+            List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME);
+            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(NotificationActivity.this);
+            startActivityForResult(intent, 304);
+
+        });
 
         send.setOnClickListener(v -> {
-            if (isOnline()){
-                hospital_ = hospital.getText().toString().trim();
-                if (hospital_.isEmpty()) {
-                    hospital.setError("Field cannot be empty");
-                    hospital.requestFocus();
-                    return;
-                }
+            if (isOnline()) {
                 condition_ = condition.getText().toString().trim();
                 if (condition_.isEmpty()) {
                     condition.setError("Field cannot be empty");
@@ -159,11 +183,12 @@ public class NotificationActivity extends AppCompatActivity implements OnMapRead
                             SignupHelper signupHelper = documentSnapshot.toObject(SignupHelper.class);
                             String fullName = signupHelper.getFullName();
                             String phoneNumber = signupHelper.getPhoneNumber();
-                            sendNotifications(userToken, blood_group, hospital_, condition_, noOfBags_, uid, fullName, phoneNumber);
+                            //sendNotifications(userToken, blood_group, hospital_, condition_, noOfBags_, uid, fullName, phoneNumber);
                         }).addOnFailureListener(e -> {
                             Toast.makeText(NotificationActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                     }
@@ -172,11 +197,12 @@ public class NotificationActivity extends AppCompatActivity implements OnMapRead
                 showToastMessage("No Internet Connection!");
             }
         });
+
         updateToken();
     }
 
     private void updateToken() {
-        String refreshToken= FirebaseInstanceId.getInstance().getToken();
+        String refreshToken = FirebaseInstanceId.getInstance().getToken();
         Token token = new Token(refreshToken);
         FirebaseDatabase.getInstance().getReference("Tokens").child(uid).setValue(token);
     }
@@ -189,7 +215,7 @@ public class NotificationActivity extends AppCompatActivity implements OnMapRead
             public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
                 Log.d("fire", "Response: " + response.toString());
                 if (response.code() == 200) {
-                    if(response.body() != null) {
+                    if (response.body() != null) {
                         if (response.body().success != 1) {
                             Toast.makeText(NotificationActivity.this, "Failed to send request", Toast.LENGTH_SHORT).show();
                         } else {
@@ -232,67 +258,139 @@ public class NotificationActivity extends AppCompatActivity implements OnMapRead
 
         mMap = googleMap;
 
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        CameraUpdate location = CameraUpdateFactory.newLatLngZoom(sydney, 9.0f);
-        mMap.animateCamera(location);
+        mMap.setOnMyLocationButtonClickListener(() -> {
+            getCurrentLocation();
+            return true;
+        });
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission();
+            return;
+        }
+        if (mMap != null){
+            getCurrentLocation();
+        }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        Bundle mapViewBundle = outState.getBundle(MAPVIEW_BUNDLE_KEY);
-        if (mapViewBundle == null) {
-            mapViewBundle = new Bundle();
-            outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle);
+    @SuppressLint("MissingPermission")
+    public void getCurrentLocation() {
+        if (!mMap.isMyLocationEnabled()){
+            mMap.setMyLocationEnabled(true);
         }
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
+            if (location != null) {
+                try {
+                    Geocoder geocoder = new Geocoder(NotificationActivity.this, Locale.getDefault());
+                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                    latLng = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+                    locationName_ = addresses.get(0).getLocality();
+                    locationAddress_ = addresses.get(0).getAddressLine(0);
+                    locationAddress.setText(locationAddress_);
+                    CameraUpdate currentLocation = CameraUpdateFactory.newLatLngZoom(latLng, 15.0f);
+                    mMap.animateCamera(currentLocation);
+                } catch (IOException e) {
+                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Location couldnt be received", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(e -> Toast.makeText(NotificationActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
 
-        mapView.onSaveInstanceState(mapViewBundle);
+    public void requestLocationPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            showMessageInfo();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 501);
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 501) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                locationDialog.dismiss();
+                Toast.makeText(this, "Permission Granted!", Toast.LENGTH_SHORT).show();
+                getCurrentLocation();
+            } else {
+                locationDialog.dismiss();
+                Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+                if (!ActivityCompat.shouldShowRequestPermissionRationale(NotificationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    showMessagePermanentDeny();
+                }
+            }
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mapView.onResume();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (mMap != null){
+                getCurrentLocation();
+            }
+        }
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        mapView.onStart();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 304 && resultCode == RESULT_OK) {
+            assert data != null;
+            Place place = Autocomplete.getPlaceFromIntent(data);
+            locationName_ = place.getName();
+            latLng = place.getLatLng();
+            locationAddress_ = place.getAddress();
+            locationAddress.setText(locationAddress_);
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Current location: " + locationName_));
+            CameraUpdate currentLocation = CameraUpdateFactory.newLatLngZoom(latLng, 9.0f);
+            mMap.animateCamera(currentLocation);
+        } else {
+            assert data != null;
+            Status status = Autocomplete.getStatusFromIntent(data);
+            assert status.getStatusMessage() != null;
+            Log.d("Statx", status.getStatusMessage());
+        }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mapView.onStop();
+    private void showMessageInfo() {
+        locationDialog.setContentView(R.layout.item_location_dialog);
+        locationDialog.setCanceledOnTouchOutside(false);
+
+        TextView continueButton = locationDialog.findViewById(R.id.btn_continue_location);
+
+        continueButton.setOnClickListener(view -> {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 501);
+        });
+
+        locationDialog.show();
+        Objects.requireNonNull(locationDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
-    @Override
-    public void onPause() {
-        mapView.onPause();
-        super.onPause();
+    private void showMessagePermanentDeny() {
+        permanentDenyDialog.setContentView(R.layout.item_permanent_deny_dialog);
+        permanentDenyDialog.setCanceledOnTouchOutside(false);
+
+        TextView settings = permanentDenyDialog.findViewById(R.id.btn_settings_location);
+        TextView cancel = permanentDenyDialog.findViewById(R.id.btn_cancel_location);
+
+        settings.setOnClickListener(view -> {
+            permanentDenyDialog.dismiss();
+            gotoApplicationSettings();
+        });
+        cancel.setOnClickListener(view -> permanentDenyDialog.dismiss());
+
+        permanentDenyDialog.show();
+        Objects.requireNonNull(permanentDenyDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
-    @Override
-    public void onDestroy() {
-        mapView.onDestroy();
-        super.onDestroy();
+    private void gotoApplicationSettings() {
+        Intent intent = new Intent();
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", this.getPackageName(), null);
+        intent.setData(uri);
+        startActivity(intent);
     }
 
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        /**
-         * Request all parents to relinquish the touch events
-         */
-        scrollView.requestDisallowInterceptTouchEvent(true);
-        return super.dispatchTouchEvent(ev);
-    }
 }
