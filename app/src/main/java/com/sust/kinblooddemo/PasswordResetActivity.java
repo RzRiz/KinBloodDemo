@@ -16,8 +16,8 @@ public class PasswordResetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_reset);
 
-        editText = findViewById(R.id.et_reset_email);
-        Button button = findViewById(R.id.btn_send_link);
+        editText = findViewById(R.id.activity_password_reset_resetEmail_TextInputEditText);
+        Button button = findViewById(R.id.activity_password_reset_sendEmail_Button);
 
         button.setOnClickListener(v -> {
             String email = editText.getText().toString();

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -31,7 +32,7 @@
                 android:theme="@style/TextInputLayoutAppearance">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_fullname"
+                    android:id="@+id/activity_registration_fullName_TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -50,7 +51,7 @@
                 android:theme="@style/TextInputLayoutAppearance">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_phoneNumber"
+                    android:id="@+id/activity_registration_phoneNumber_TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -69,7 +70,7 @@
                 android:theme="@style/TextInputLayoutAppearance">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_email"
+                    android:id="@+id/activity_registration_email_TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -80,7 +81,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/et_password"
+                android:id="@+id/activity_registration_password_TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:passwordToggleEnabled="true"
@@ -101,7 +102,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/et_confirmPassword"
+                android:id="@+id/activity_registration_confirmPassword_TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:passwordToggleEnabled="true"
@@ -123,7 +124,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_signUp"
+            android:id="@+id/activity_registration_signUp_Button"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:background="@drawable/primary_rounded_rectangle"
@@ -140,14 +141,14 @@
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="signuptologin"
+            android:onClick="signUpToLogin"
             android:text="Already a user? Login"
             android:textSize="25sp"
             android:textColor="@color/colorWhite"
             android:layout_gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_signUp"
+            app:layout_constraintTop_toBottomOf="@+id/activity_registration_signUp_Button"
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

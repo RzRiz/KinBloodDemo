@@ -53,7 +53,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".NotificationActivity" />
+        <activity android:name=".NeedDonorActivity" />
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".DonorRegistrationActivity" />
         <activity android:name=".Decision" />

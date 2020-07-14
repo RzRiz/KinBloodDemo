@@ -10,13 +10,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.Calendar;
-
+import java.util.Objects;
 
 public class EditBloodInfo extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,11 +37,13 @@ public class EditBloodInfo extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_blood_info);
 
+        ImageView home= findViewById(R.id.activity_edit_blood_info_home_ImageView);
+        radioGroupDonatedBefore = findViewById(R.id.activity_edit_blood_info_donated_before_RadioGroup);
+        timesDonated = findViewById(R.id.activity_edit_blood_info_donateTimes_EditText);
+        lastDonated = findViewById(R.id.activity_edit_blood_info_lastDonatedBlood_Button);
+        Button updateDonationInfo = findViewById(R.id.activity_edit_blood_info_update_Button);
 
-        radioGroupDonatedBefore = findViewById(R.id.rg_donated_before);
-        timesDonated = findViewById(R.id.et_edit_times_donated);
-        lastDonated = findViewById(R.id.btn_last_donated);
-        Button updateDonationInfo = findViewById(R.id.btn_update_donation_info);
+        home.setOnClickListener(view -> startActivity(new Intent(EditBloodInfo.this, HomeActivity.class)));
 
         updateDonationInfo.setOnClickListener(this);
         lastDonated.setOnClickListener(this);
@@ -48,9 +51,8 @@ public class EditBloodInfo extends AppCompatActivity implements View.OnClickList
         String oldLastDonated_ = getIntent().getStringExtra("oldLastDonated");
         lastDonated.setText(oldLastDonated_);
 
-
         radioGroupDonatedBefore.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.rb_donate_positive) {
+            if (checkedId == R.id.activity_edit_blood_info_donatePositive_RadioButton) {
                 timesDonated.setEnabled(true);
                 lastDonated.setEnabled(true);
             } else {
@@ -66,19 +68,19 @@ public class EditBloodInfo extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
 
-        if (v.getId() == R.id.btn_last_donated){
+        if (v.getId() == R.id.activity_edit_blood_info_lastDonatedBlood_Button){
             DatePickerDialog datePickerDialog = new DatePickerDialog(EditBloodInfo.this,
                     android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                     dateSetListenerd, year, month, day);
-            datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            Objects.requireNonNull(datePickerDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             datePickerDialog.show();
         }
-        else if (v.getId() == R.id.btn_update_donation_info){
+        else if (v.getId() == R.id.activity_edit_blood_info_update_Button){
             checkId = radioGroupDonatedBefore.getCheckedRadioButtonId();
             if (checkId == -1){
                 Toast.makeText(this, "Have you donated blood before?", Toast.LENGTH_LONG).show();
             } else {
-                if (checkId == R.id.rb_donate_negative){
+                if (checkId == R.id.activity_edit_blood_info_donateNegative_RadioButton){
                     DonationInfoHelper donationInfoHelper = new DonationInfoHelper(0, 0, 0, 0);
                     HomeActivity.DOCUMENT_REFERENCE
                             .set(donationInfoHelper, SetOptions.merge())
@@ -105,9 +107,7 @@ public class EditBloodInfo extends AppCompatActivity implements View.OnClickList
                                 .set(donationInfoHelper, SetOptions.merge()).addOnSuccessListener(aVoid -> {
                             Toast.makeText(EditBloodInfo.this, "Donation information update successful", Toast.LENGTH_SHORT).show();
                             date = dDay + " / " + dMonth + " / " + dYear;
-                        }).addOnFailureListener(e -> {
-                            Toast.makeText(EditBloodInfo.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        });
+                        }).addOnFailureListener(e -> Toast.makeText(EditBloodInfo.this, e.getMessage(), Toast.LENGTH_LONG).show());
                     }
                 }
             }
@@ -124,13 +124,12 @@ public class EditBloodInfo extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onBackPressed() {
-        if (checkId == R.id.rb_donate_negative){
-            Intent intent = new Intent(EditBloodInfo.this, ProfileActivity.class);
+        Intent intent = new Intent(EditBloodInfo.this, ProfileActivity.class);
+        if (checkId == R.id.activity_edit_blood_info_donateNegative_RadioButton){
             intent.putExtra("donationInfo", "negative");
             setResult(2, intent);
         }
         else {
-            Intent intent = new Intent(EditBloodInfo.this, ProfileActivity.class);
             intent.putExtra("newLastDonated", date);
             intent.putExtra("newDonatetimes", timesDonated_);
             setResult(3, intent);

@@ -8,14 +8,13 @@
     android:layout_height="match_parent"
     android:background="@color/colorAsh"
     android:orientation="vertical"
-    tools:context=".NotificationActivity">
+    tools:context=".NeedDonorActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:background="@color/colorYellowWhite"
@@ -23,7 +22,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <ImageView
-                android:id="@+id/iv_home"
+                android:id="@+id/activity_need_donor_home_ImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_home"
@@ -54,7 +53,6 @@
             android:paddingVertical="20dp">
 
             <TextView
-                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Required Blood Group"
@@ -71,7 +69,7 @@
                 android:layout_marginHorizontal="30dp"/>
 
             <com.hitomi.cmlibrary.CircleMenu
-                android:id="@+id/circleMenu"
+                android:id="@+id/activity_need_donor_CircleMenu"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
                 android:layout_gravity="center" />
@@ -86,11 +84,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Blood Group: "
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorYellowWhite"
                     android:textSize="25sp" />
 
                 <TextView
-                    android:id="@+id/tv_blood"
+                    android:id="@+id/activity_need_donor_selected_blood_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Not Selected"
@@ -99,33 +97,33 @@
             </LinearLayout>
 
             <TextView
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Selected Location:"
+                android:text="Selected Location"
                 android:textSize="25sp"
-                android:textColor="#fff"/>
+                android:textColor="@color/colorYellowWhite"
+                android:gravity="center"
+                android:layout_marginTop="10dp"/>
 
             <TextView
-                android:id="@+id/selected_location"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="5dp"
+                android:id="@+id/activity_need_donor_selected_location_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Not Selected"
+                android:textColor="@color/colorWhite"
                 android:textSize="25sp"
-                android:textColor="#fff"/>
+                android:gravity="center"
+                android:layout_marginHorizontal="20dp" />
 
             <fragment
-                android:id="@+id/frag_notif"
+                android:id="@+id/activity_need_donor_map_Fragment"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_margin="10dp">
 
                 <EditText
-                    android:id="@+id/map_search"
+                    android:id="@+id/activity_need_donor_searchMap_EditText"
                     android:padding="10dp"
                     android:layout_margin="40dp"
                     android:layout_width="match_parent"
@@ -143,7 +141,7 @@
                 android:theme="@style/TextInputLayoutAppearance">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_condition"
+                    android:id="@+id/activity_need_donor_condition_TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -160,7 +158,7 @@
                 android:theme="@style/TextInputLayoutAppearance">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_noOfBags"
+                    android:id="@+id/activity_need_donor_noOfBags_TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -171,7 +169,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/btn_sendNotif"
+                android:id="@+id/activity_need_donor_sendNotification_Button"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:background="@drawable/primary_rounded_rectangle"

@@ -8,14 +8,13 @@
     android:layout_height="match_parent"
     android:background="@color/colorAsh"
     android:orientation="vertical"
-    tools:context=".NotificationActivity">
+    tools:context=".DonorRegistrationActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:background="@color/colorYellowWhite"
@@ -23,7 +22,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <ImageView
-                android:id="@+id/iv_home2"
+                android:id="@+id/activity_donor_registration_home_ImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_home"
@@ -44,7 +43,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-        android:id="@+id/adr_linearLayout"
+        android:id="@+id/activity_donor_registration_LinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -74,7 +73,7 @@
             android:layout_marginHorizontal="30dp" />
 
         <Button
-            android:id="@+id/btn_cancel_registration"
+            android:id="@+id/activity_donor_registration_cancel_registration_Button"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:background="@drawable/primary_rounded_rectangle"
@@ -86,7 +85,7 @@
     </LinearLayout>
 
     <ScrollView
-        android:id="@+id/adr_scrollView"
+        android:id="@+id/activity_donor_registration_scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -100,12 +99,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Current Address"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/colorYellowWhite"
                 android:textSize="20sp"
                 android:layout_marginHorizontal="20dp" />
 
             <EditText
-                android:id="@+id/et_current_address"
+                android:id="@+id/activity_donor_registration_current_address_EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/TextInputLayoutAppearance"
@@ -119,13 +118,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Home District"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/colorYellowWhite"
                 android:textSize="20sp"
                 android:layout_marginTop="15dp"
                 android:layout_marginHorizontal="20dp" />
 
             <EditText
-                android:id="@+id/et_home_district"
+                android:id="@+id/activity_donor_registration_home_district_EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/TextInputLayoutAppearance"
@@ -145,11 +144,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Date of Birth:"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorYellowWhite"
                     android:textSize="20sp" />
 
                 <Button
-                    android:id="@+id/btn_bday"
+                    android:id="@+id/activity_donor_registration_birthDay_Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" dd / mm / yyyy"
@@ -175,14 +174,14 @@
                     android:textSize="20sp" />
 
                 <RadioGroup
-                    android:id="@+id/rgGender"
+                    android:id="@+id/activity_donor_registration_Gender_RadioGroup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginStart="20dp">
 
                     <RadioButton
-                        android:id="@+id/rb_male"
+                        android:id="@+id/activity_donor_registration_male_RadioButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Male"
@@ -192,7 +191,7 @@
                         android:paddingHorizontal="10dp" />
 
                     <RadioButton
-                        android:id="@+id/rb_female"
+                        android:id="@+id/activity_donor_registration_female_RadioButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Female"
@@ -214,11 +213,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Blood Group: "
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorYellowWhite"
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/tv_selectedBlood"
+                    android:id="@+id/activity_donor_registration_selectedBlood_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Not Selected"
@@ -235,7 +234,7 @@
                 android:layout_marginHorizontal="30dp"/>
 
             <com.hitomi.cmlibrary.CircleMenu
-                android:id="@+id/circleMenu"
+                android:id="@+id/activity_donor_registration_CircleMenu"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_gravity="center" />
@@ -244,12 +243,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Occupation"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/colorYellowWhite"
                 android:textSize="20sp"
                 android:layout_marginHorizontal="20dp" />
 
             <EditText
-                android:id="@+id/et_occupation"
+                android:id="@+id/activity_donor_registration_occupation_EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/TextInputLayoutAppearance"
@@ -262,13 +261,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Institute"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/colorYellowWhite"
                 android:textSize="20sp"
                 android:layout_marginTop="15dp"
                 android:layout_marginHorizontal="20dp" />
 
             <EditText
-                android:id="@+id/et_institute"
+                android:id="@+id/activity_donor_registration_institute_EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/TextInputLayoutAppearance"
@@ -287,14 +286,14 @@
                 android:layout_marginHorizontal="20dp" />
 
             <RadioGroup
-                android:id="@+id/rgDonated_before"
+                android:id="@+id/activity_donor_registration_donated_before_RadioGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="center">
 
                 <RadioButton
-                    android:id="@+id/rbDonate_Positive"
+                    android:id="@+id/activity_donor_registration_donatePositive_RadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Yes"
@@ -304,7 +303,7 @@
                     android:paddingHorizontal="10dp" />
 
                 <RadioButton
-                    android:id="@+id/rbDonate_Negative"
+                    android:id="@+id/activity_donor_registration_donateNegative_RadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="No"
@@ -324,7 +323,7 @@
                 android:layout_marginHorizontal="20dp" />
 
             <EditText
-                android:id="@+id/et_donate_times"
+                android:id="@+id/activity_donor_registration_donateTimes_EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/TextInputLayoutAppearance"
@@ -344,7 +343,7 @@
                 android:layout_marginHorizontal="20dp" />
 
             <Button
-                android:id="@+id/btn_ldblood"
+                android:id="@+id/activity_donor_registration_lastDonatedBlood_Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" dd / mm / yyyy"
@@ -356,7 +355,7 @@
                 android:layout_gravity="center"/>
 
             <Button
-                android:id="@+id/btn_register"
+                android:id="@+id/activity_donor_registration_register_Button"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:background="@drawable/primary_rounded_rectangle"

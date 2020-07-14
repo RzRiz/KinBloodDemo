@@ -41,8 +41,8 @@ public class HomeActivity extends AppCompatActivity{
         DOCUMENT_REFERENCE = FirebaseFirestore.getInstance().collection("Users").document(FIREBASE_USER.getUid());
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        NavigationView navigationView = findViewById(R.id.activity_home_nav_view);
+        Toolbar toolbar = findViewById(R.id.activity_home_Toolbar);
 
         navigationView.bringToFront();
         setSupportActionBar(toolbar);
@@ -51,18 +51,18 @@ public class HomeActivity extends AppCompatActivity{
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        TextView arrow = findViewById(R.id.tv_arrow);
-        TextView name = findViewById(R.id.tv_name);
-        TextView email = findViewById(R.id.tv_email);
-        TextView home = findViewById(R.id.tv_home);
-        TextView needDonor = findViewById(R.id.tv_need_donor);
-        TextView becomeDonor = findViewById(R.id.tv_become_donor);
-        TextView request = findViewById(R.id.tv_request);
-        TextView profile = findViewById(R.id.tv_profile);
-        TextView settings = findViewById(R.id.tv_settings);
-        TextView about = findViewById(R.id.tv_about);
-        TextView rate = findViewById(R.id.tv_rate);
-        TextView logOut = findViewById(R.id.tv_log_out);
+        TextView arrow = findViewById(R.id.activity_home_arrow_TextView);
+        TextView name = findViewById(R.id.activity_home_name_TextView);
+        TextView email = findViewById(R.id.activity_home_email_TextView);
+        TextView home = findViewById(R.id.activity_home_home_TextView);
+        TextView needDonor = findViewById(R.id.activity_home_need_donor_TextView);
+        TextView becomeDonor = findViewById(R.id.activity_home_become_donor_TextView);
+        TextView request = findViewById(R.id.activity_home_request_TextView);
+        TextView profile = findViewById(R.id.activity_home_profile_TextView);
+        TextView settings = findViewById(R.id.activity_home_settings_TextView);
+        TextView about = findViewById(R.id.activity_home_about_TextView);
+        TextView rate = findViewById(R.id.activity_home_rate_TextView);
+        TextView logOut = findViewById(R.id.activity_home_log_out_TextView);
 
         DOCUMENT_REFERENCE.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -80,7 +80,7 @@ public class HomeActivity extends AppCompatActivity{
         home.setOnClickListener(view -> drawerLayout.closeDrawer(GravityCompat.START));
 
         needDonor.setOnClickListener(view -> {
-            startActivity(new Intent(HomeActivity.this, NotificationActivity.class));
+            startActivity(new Intent(HomeActivity.this, NeedDonorActivity.class));
             drawerLayout.closeDrawer(GravityCompat.START);
         });
 

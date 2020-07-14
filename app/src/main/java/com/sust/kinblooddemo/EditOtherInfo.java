@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,14 +28,17 @@ public class EditOtherInfo extends AppCompatActivity implements View.OnClickList
             data.add("");
         }
 
-        occupation = findViewById(R.id.et_edit_occupation);
-        institute = findViewById(R.id.et_edit_institute);
-        currentAddress = findViewById(R.id.et_edit_current_address);
-        homeDistrict = findViewById(R.id.et_edit_home_district);
-        Button updateOccupation = findViewById(R.id.btn_update_occupation);
-        Button updateInstitute = findViewById(R.id.btn_update_institute);
-        Button updateCurrentAddress = findViewById(R.id.btn_update_current_address);
-        Button updateHomeDistrict = findViewById(R.id.btn_update_home_district);
+        ImageView home= findViewById(R.id.activity_edit_other_info_home_ImageView);
+        occupation = findViewById(R.id.activity_edit_other_info_editOccupation_TextInputEditText);
+        institute = findViewById(R.id.activity_edit_other_info_editInstitute_TextInputEditText);
+        currentAddress = findViewById(R.id.activity_edit_other_info_editCurrentAddress_TextInputEditText);
+        homeDistrict = findViewById(R.id.activity_edit_other_info_editHomeDistrict_TextInputEditText);
+        Button updateOccupation = findViewById(R.id.activity_edit_other_info_updateOccupation_Button);
+        Button updateInstitute = findViewById(R.id.activity_edit_other_info_updateInstitute_Button);
+        Button updateCurrentAddress = findViewById(R.id.activity_edit_other_info_updateCurrentAddress_Button);
+        Button updateHomeDistrict = findViewById(R.id.activity_edit_other_info_updateHomeDistrict_Button);
+
+        home.setOnClickListener(view -> startActivity(new Intent(EditOtherInfo.this, HomeActivity.class)));
 
         updateCurrentAddress.setOnClickListener(this);
         updateOccupation.setOnClickListener(this);
@@ -44,7 +48,7 @@ public class EditOtherInfo extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_update_occupation){
+        if (v.getId() == R.id.activity_edit_other_info_updateOccupation_Button){
             String occupation_ = occupation.getText().toString().trim();
             if (occupation_.isEmpty()){
                 occupation.setError("Field cannot be empty");
@@ -60,7 +64,7 @@ public class EditOtherInfo extends AppCompatActivity implements View.OnClickList
                 }).addOnFailureListener(e -> Toast.makeText(EditOtherInfo.this, e.getMessage(), Toast.LENGTH_LONG).show());
             }
         }
-        else if (v.getId() == R.id.btn_update_institute){
+        else if (v.getId() == R.id.activity_edit_other_info_updateInstitute_Button){
             String institute_ = institute.getText().toString().trim();
             if (institute_.isEmpty()){
                 institute.setError("Field cannot be empty");
@@ -76,7 +80,7 @@ public class EditOtherInfo extends AppCompatActivity implements View.OnClickList
                 }).addOnFailureListener(e -> Toast.makeText(EditOtherInfo.this, e.getMessage(), Toast.LENGTH_LONG).show());
             }
         }
-        else if (v.getId() == R.id.btn_update_current_address){
+        else if (v.getId() == R.id.activity_edit_other_info_updateCurrentAddress_Button){
             String currentAddress_ = currentAddress.getText().toString();
             if (currentAddress_.isEmpty()){
                 currentAddress.setError("Field cannot be empty");
@@ -92,7 +96,7 @@ public class EditOtherInfo extends AppCompatActivity implements View.OnClickList
                 }).addOnFailureListener(e -> Toast.makeText(EditOtherInfo.this, e.getMessage(), Toast.LENGTH_LONG).show());
             }
         }
-        else if (v.getId() == R.id.btn_update_home_district){
+        else if (v.getId() == R.id.activity_edit_other_info_updateHomeDistrict_Button){
             String homeDistrict_ = homeDistrict.getText().toString();
             if (homeDistrict_.isEmpty()){
                 homeDistrict.setError("Field cannot be empty");

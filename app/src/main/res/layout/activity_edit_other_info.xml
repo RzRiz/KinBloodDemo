@@ -1,84 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAsh"
+    android:orientation="vertical"
     tools:context=".EditOtherInfo">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_width="match_parent">
 
-        <com.google.android.material.textfield.TextInputLayout
+        <androidx.appcompat.widget.Toolbar
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:background="@color/colorYellowWhite"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_edit_occupation"
+            <ImageView
+                android:id="@+id/activity_edit_other_info_home_ImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_home"
+                android:tint="@color/colorPrimary"
+                android:padding="10dp"
+                android:layout_marginEnd="10dp"/>
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Occupation" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="@color/colorBlack"
+                android:textSize="30sp"
+                android:drawableStart="@drawable/ic_app_logo_40dp"
+                android:paddingHorizontal="10dp"/>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <Button
-            android:id="@+id/btn_update_occupation"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="update Occupation"/>
+            android:orientation="vertical"
+            android:paddingVertical="20dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_edit_institute"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Institute" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginHorizontal="40dp"
+                android:theme="@style/TextInputLayoutAppearance">
 
-        <Button
-            android:id="@+id/btn_update_institute"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="update Institute"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activity_edit_other_info_editOccupation_TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="Occupation"
+                    android:inputType="text"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/activity_edit_other_info_updateOccupation_Button"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/primary_rounded_rectangle"
+                android:text="Update Occupation"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhite"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="50dp"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_edit_current_address"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Current Address" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="15dp"
+                android:layout_marginHorizontal="40dp"
+                android:theme="@style/TextInputLayoutAppearance">
 
-        <Button
-            android:id="@+id/btn_update_current_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="update current address"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activity_edit_other_info_editInstitute_TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="Institute"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/activity_edit_other_info_updateInstitute_Button"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/primary_rounded_rectangle"
+                android:text="Update Institute"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhite"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="50dp"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_edit_home_district"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Home District" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="15dp"
+                android:layout_marginHorizontal="40dp"
+                android:theme="@style/TextInputLayoutAppearance">
 
-        <Button
-            android:id="@+id/btn_update_home_district"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="update home district"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activity_edit_other_info_editHomeDistrict_TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="Home District"
+                    android:inputType="text"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/activity_edit_other_info_updateHomeDistrict_Button"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/primary_rounded_rectangle"
+                android:text="Update Home District"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhite"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="50dp"/>
 
-</ScrollView>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginHorizontal="40dp"
+                android:theme="@style/TextInputLayoutAppearance">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activity_edit_other_info_editCurrentAddress_TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="Current Address"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/activity_edit_other_info_updateCurrentAddress_Button"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/primary_rounded_rectangle"
+                android:text="Update Current Address"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhite"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="50dp"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -54,23 +54,23 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
         toastMessageDialog2 = new Dialog(DonorRegistrationActivity.this);
         toastMessageDialog3 = new Dialog(DonorRegistrationActivity.this);
 
-        linearLayout = findViewById(R.id.adr_linearLayout);
-        scrollView = findViewById(R.id.adr_scrollView);
+        linearLayout = findViewById(R.id.activity_donor_registration_LinearLayout);
+        scrollView = findViewById(R.id.activity_donor_registration_scrollView);
 
-        CircleMenu circleMenu = findViewById(R.id.circleMenu);
-        radioGroupGender = findViewById(R.id.rgGender);
-        radioGroupDonatedBefore = findViewById(R.id.rgDonated_before);
-        currentAddress = findViewById(R.id.et_current_address);
-        homeDistrict = findViewById(R.id.et_home_district);
-        occupation = findViewById(R.id.et_occupation);
-        institute = findViewById(R.id.et_institute);
-        donateTimes = findViewById(R.id.et_donate_times);
-        birthDay = findViewById(R.id.btn_bday);
-        lastDonated = findViewById(R.id.btn_ldblood);
-        ImageView home= findViewById(R.id.iv_home2);
-        TextView selectedBloodGroup = findViewById(R.id.tv_selectedBlood);
-        Button register = findViewById(R.id.btn_register);
-        Button cancelRegistration = findViewById(R.id.btn_cancel_registration);
+        ImageView home= findViewById(R.id.activity_donor_registration_home_ImageView);
+        CircleMenu circleMenu = findViewById(R.id.activity_donor_registration_CircleMenu);
+        radioGroupGender = findViewById(R.id.activity_donor_registration_Gender_RadioGroup);
+        radioGroupDonatedBefore = findViewById(R.id.activity_donor_registration_donated_before_RadioGroup);
+        currentAddress = findViewById(R.id.activity_donor_registration_current_address_EditText);
+        homeDistrict = findViewById(R.id.activity_donor_registration_home_district_EditText);
+        occupation = findViewById(R.id.activity_donor_registration_occupation_EditText);
+        institute = findViewById(R.id.activity_donor_registration_institute_EditText);
+        donateTimes = findViewById(R.id.activity_donor_registration_donateTimes_EditText);
+        birthDay = findViewById(R.id.activity_donor_registration_birthDay_Button);
+        lastDonated = findViewById(R.id.activity_donor_registration_lastDonatedBlood_Button);
+        TextView selectedBloodGroup = findViewById(R.id.activity_donor_registration_selectedBlood_TextView);
+        Button register = findViewById(R.id.activity_donor_registration_register_Button);
+        Button cancelRegistration = findViewById(R.id.activity_donor_registration_cancel_registration_Button);
 
         String donorStatus = getIntent().getStringExtra("donorStatus");
 
@@ -86,7 +86,6 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
             scrollView.setVisibility(View.VISIBLE);
             linearLayout.setVisibility(View.GONE);
         }
-
 
         home.setOnClickListener(view -> startActivity(new Intent(DonorRegistrationActivity.this, HomeActivity.class)));
 
@@ -119,7 +118,7 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
         register.setOnClickListener(this);
 
         radioGroupDonatedBefore.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.rbDonate_Positive) {
+            if (checkedId == R.id.activity_donor_registration_donatePositive_RadioButton) {
                 donateTimes.setEnabled(true);
                 lastDonated.setEnabled(true);
             } else {
@@ -175,20 +174,20 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
             return false;
         }
         String donate_Times = donateTimes.getText().toString().trim();
-        if (j == R.id.rbDonate_Positive && donate_Times.isEmpty()) {
+        if (j == R.id.activity_donor_registration_donatePositive_RadioButton && donate_Times.isEmpty()) {
             donateTimes.setError("Field cannot be empty");
             donateTimes.requestFocus();
             return false;
         }
-        if (j == R.id.rbDonate_Positive && Integer.parseInt(donate_Times) == 0) {
+        if (j == R.id.activity_donor_registration_donatePositive_RadioButton && Integer.parseInt(donate_Times) == 0) {
             donateTimes.setError("Please Enter a valid number");
             donateTimes.requestFocus();
             return false;
         }
-        if (j == R.id.rbDonate_Positive) {
+        if (j == R.id.activity_donor_registration_donatePositive_RadioButton) {
             dTimes = Integer.parseInt(donate_Times);
         }
-        if (j == R.id.rbDonate_Positive && (dDay == 0 || dMonth == 0 || dYear == 0)) {
+        if (j == R.id.activity_donor_registration_donatePositive_RadioButton && (dDay == 0 || dMonth == 0 || dYear == 0)) {
             Toast.makeText(this, "When did you last donate blood?", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -197,7 +196,7 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_bday) {
+        if (v.getId() == R.id.activity_donor_registration_birthDay_Button) {
             DatePickerDialog datePickerDialog = new DatePickerDialog(DonorRegistrationActivity.this,
                     android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                     dateSetListenerb, year, month, day);
@@ -212,7 +211,7 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
             bMonth = month;
             bDay = dayOfMonth;
         };
-        if (v.getId() == R.id.btn_ldblood) {
+        if (v.getId() == R.id.activity_donor_registration_lastDonatedBlood_Button) {
             DatePickerDialog datePickerDialog = new DatePickerDialog(DonorRegistrationActivity.this,
                     android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                     dateSetListenerd, year, month, day);
@@ -227,7 +226,7 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
             dMonth = month;
             dDay = dayOfMonth;
         };
-        if (v.getId() == R.id.btn_register) {
+        if (v.getId() == R.id.activity_donor_registration_register_Button) {
             if (isOnline()) {
                 if (!getData()) {
                     return;
@@ -261,9 +260,7 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
 
         TextView continueButton = toastMessageDialog2.findViewById(R.id.btn_continue);
 
-        continueButton.setOnClickListener(view -> {
-            finish();
-        });
+        continueButton.setOnClickListener(view -> finish());
 
         toastMessageDialog2.show();
         Objects.requireNonNull(toastMessageDialog2.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -275,9 +272,7 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
 
         TextView continueButton = toastMessageDialog3.findViewById(R.id.btn_continue2);
 
-        continueButton.setOnClickListener(view -> {
-            finish();
-        });
+        continueButton.setOnClickListener(view -> finish());
 
         toastMessageDialog3.show();
         Objects.requireNonNull(toastMessageDialog3.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

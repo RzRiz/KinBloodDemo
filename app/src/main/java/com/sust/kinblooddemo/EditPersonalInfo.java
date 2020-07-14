@@ -12,6 +12,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.TaskExecutors;
@@ -25,6 +26,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class EditPersonalInfo extends AppCompatActivity implements View.OnClickListener, DialoguePassword.DialoguePasswordListener {
@@ -47,18 +49,21 @@ public class EditPersonalInfo extends AppCompatActivity implements View.OnClickL
             ara.add("");
         }
 
-        name = findViewById(R.id.et_change_name);
-        phoneNumber = findViewById(R.id.et_edit_phone_number);
-        otp = findViewById(R.id.et_edit_otp);
-        email = findViewById(R.id.et_edit_emailEP);
-        oldPassword = findViewById(R.id.et_edit_old_password);
-        newPassword = findViewById(R.id.et_edit_new_password);
-        confirmNewPassword = findViewById(R.id.et_edit_confirm_new_password);
-        Button updateName = findViewById(R.id.btn_change_name);
-        Button updatePhoneNumber = findViewById(R.id.btn_update_phone_number);
-        verifyOtp = findViewById(R.id.btn_verify_otp);
-        Button updateEmail = findViewById(R.id.btn_update_email);
-        Button updatePassword = findViewById(R.id.btn_update_password);
+        ImageView home= findViewById(R.id.activity_edit_personal_info_home_ImageView);
+        name = findViewById(R.id.activity_edit_personal_info_fullName_TextInputEditText);
+        phoneNumber = findViewById(R.id.activity_edit_personal_info_phoneNumber_TextInputEditText);
+        otp = findViewById(R.id.activity_edit_personal_info_verificationCOde_TextInputEditText);
+        email = findViewById(R.id.activity_edit_personal_info_edit_email_TextInputEditText);
+        oldPassword = findViewById(R.id.activity_edit_personal_info_edit_old_password_TextInputLayout);
+        newPassword = findViewById(R.id.activity_edit_personal_info_edit_new_password_TextInputLayout);
+        confirmNewPassword = findViewById(R.id.activity_edit_personal_info_edit_confirm_new_password_TextInputLayout);
+        Button updateName = findViewById(R.id.activity_edit_personal_info_changeName_Button);
+        Button updatePhoneNumber = findViewById(R.id.activity_edit_personal_info_update_phone_number_Button);
+        verifyOtp = findViewById(R.id.activity_edit_personal_info_verify_Button);
+        Button updateEmail = findViewById(R.id.activity_edit_personal_info_update_email_Button);
+        Button updatePassword = findViewById(R.id.activity_edit_personal_info_update_password_Button);
+
+        home.setOnClickListener(view -> startActivity(new Intent(EditPersonalInfo.this, HomeActivity.class)));
 
         oldEmail_ = getIntent().getStringExtra("oldEmail");
 
@@ -66,9 +71,9 @@ public class EditPersonalInfo extends AppCompatActivity implements View.OnClickL
         phoneNumber.addTextChangedListener(textWatcher);
         otp.addTextChangedListener(textWatcher);
         email.addTextChangedListener(textWatcher);
-        oldPassword.getEditText().addTextChangedListener(textWatcher);
-        newPassword.getEditText().addTextChangedListener(textWatcher);
-        confirmNewPassword.getEditText().addTextChangedListener(textWatcher);
+        Objects.requireNonNull(oldPassword.getEditText()).addTextChangedListener(textWatcher);
+        Objects.requireNonNull(newPassword.getEditText()).addTextChangedListener(textWatcher);
+        Objects.requireNonNull(confirmNewPassword.getEditText()).addTextChangedListener(textWatcher);
 
         updateName.setOnClickListener(this);
         updatePhoneNumber.setOnClickListener(this);
@@ -77,12 +82,11 @@ public class EditPersonalInfo extends AppCompatActivity implements View.OnClickL
         updatePassword.setOnClickListener(this);
 
         verifyOtp.setEnabled(false);
-
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_change_name) {
+        if (v.getId() == R.id.activity_edit_personal_info_changeName_Button) {
             String name_ = name.getText().toString().trim();
             if (name_.isEmpty()) {
                 name.setError("Field cannot be empty");
@@ -94,17 +98,15 @@ public class EditPersonalInfo extends AppCompatActivity implements View.OnClickL
                         .update(name).addOnSuccessListener(aVoid -> {
                     Toast.makeText(EditPersonalInfo.this, "Name update successful", Toast.LENGTH_SHORT).show();
                     ara.add(0, name_);
-                }).addOnFailureListener(e -> {
-                    Toast.makeText(EditPersonalInfo.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                });
+                }).addOnFailureListener(e -> Toast.makeText(EditPersonalInfo.this, e.getMessage(), Toast.LENGTH_LONG).show());
             }
-        } else if (v.getId() == R.id.btn_update_phone_number) {
+        } else if (v.getId() == R.id.activity_edit_personal_info_update_phone_number_Button) {
             trigger = 1;
             newPhoneNumber_ = new StringBuilder(phoneNumber.getText().toString().trim());
             if (phoneValidate()) {
                 openDialog();
             }
-        } else if (v.getId() == R.id.btn_verify_otp) {
+        } else if (v.getId() == R.id.activity_edit_personal_info_verify_Button) {
             String code_ = otp.getText().toString().trim();
             if (code_.isEmpty() || code_.length() < 6) {
                 otp.setError("Please enter a valid OTP");
@@ -112,7 +114,7 @@ public class EditPersonalInfo extends AppCompatActivity implements View.OnClickL
             } else {
                 verifyCode(code_);
             }
-        } else if (v.getId() == R.id.btn_update_email) {
+        } else if (v.getId() == R.id.activity_edit_personal_info_update_email_Button) {
             trigger = 2;
             newEmail_ = email.getText().toString().trim();
             if (!newEmail_.isEmpty()) {
@@ -123,10 +125,10 @@ public class EditPersonalInfo extends AppCompatActivity implements View.OnClickL
                 email.setError("Field cannot be empty");
                 email.requestFocus();
             }
-        } else if (v.getId() == R.id.btn_update_password) {
-            String oldPassword_ = oldPassword.getEditText().getText().toString().trim();
-            String newPassword_ = newPassword.getEditText().getText().toString().trim();
-            String confirmNewPassword_ = confirmNewPassword.getEditText().getText().toString().trim();
+        } else if (v.getId() == R.id.activity_edit_personal_info_update_password_Button) {
+            String oldPassword_ = Objects.requireNonNull(oldPassword.getEditText()).getText().toString().trim();
+            String newPassword_ = Objects.requireNonNull(newPassword.getEditText()).getText().toString().trim();
+            String confirmNewPassword_ = Objects.requireNonNull(confirmNewPassword.getEditText()).getText().toString().trim();
 
             if (!oldPassword_.isEmpty() && !newPassword_.isEmpty() && !confirmNewPassword_.isEmpty()) {
                 if (newPassword_.length() < 6) {
@@ -144,14 +146,8 @@ public class EditPersonalInfo extends AppCompatActivity implements View.OnClickL
                                             .addOnSuccessListener(aVoid1 -> {
                                                 Toast.makeText(EditPersonalInfo.this, "Password update successful", Toast.LENGTH_LONG).show();
                                                 ara.add(3, newPassword_);
-                                            }).addOnFailureListener(e -> {
-                                        Toast.makeText(EditPersonalInfo.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                                    });
-                                }).addOnFailureListener(e -> {
-                                    Toast.makeText(EditPersonalInfo.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                                })).addOnFailureListener(e -> {
-                            Toast.makeText(EditPersonalInfo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        });
+                                            }).addOnFailureListener(e -> Toast.makeText(EditPersonalInfo.this, e.getMessage(), Toast.LENGTH_LONG).show());
+                                }).addOnFailureListener(e -> Toast.makeText(EditPersonalInfo.this, e.getMessage(), Toast.LENGTH_LONG).show())).addOnFailureListener(e -> Toast.makeText(EditPersonalInfo.this, e.getMessage(), Toast.LENGTH_SHORT).show());
                     } else {
                         newPassword.setError(" ");
                         confirmNewPassword.setError("Passwords do not match");

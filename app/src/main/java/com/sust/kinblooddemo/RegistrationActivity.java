@@ -42,12 +42,12 @@ public class RegistrationActivity extends AppCompatActivity {
 
         toastMessageDialog = new Dialog(RegistrationActivity.this);
 
-        fullName = findViewById(R.id.et_fullname);
-        phoneNumber = findViewById(R.id.et_phoneNumber);
-        email = findViewById(R.id.et_email);
-        password = findViewById(R.id.et_password);
-        confirmPassword = findViewById(R.id.et_confirmPassword);
-        Button buttonSignUp = findViewById(R.id.btn_signUp);
+        fullName = findViewById(R.id.activity_registration_fullName_TextInputEditText);
+        phoneNumber = findViewById(R.id.activity_registration_phoneNumber_TextInputEditText);
+        email = findViewById(R.id.activity_registration_email_TextInputEditText);
+        password = findViewById(R.id.activity_registration_password_TextInputLayout);
+        confirmPassword = findViewById(R.id.activity_registration_confirmPassword_TextInputLayout);
+        Button buttonSignUp = findViewById(R.id.activity_registration_signUp_Button);
 
         fullName.addTextChangedListener(textWatcher);
         phoneNumber.addTextChangedListener(textWatcher);
@@ -183,7 +183,7 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     };
 
-    public void signuptologin(View view){
+    public void signUpToLogin(View view){
         finish();
     }
 

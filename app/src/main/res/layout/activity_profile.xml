@@ -15,7 +15,6 @@
         android:layout_width="match_parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:background="@color/colorYellowWhite"
@@ -23,7 +22,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <ImageView
-                android:id="@+id/iv_home"
+                android:id="@+id/activity_profile_home_ImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_home"
@@ -82,7 +81,7 @@
                             android:layout_gravity="center" />
 
                         <TextView
-                            android:id="@+id/tv_edit_personal_info"
+                            android:id="@+id/activity_profile_edit_personal_info_TextView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1.6"
@@ -110,7 +109,7 @@
                             android:textSize="20sp" />
 
                         <TextView
-                            android:id="@+id/tv_edit_name"
+                            android:id="@+id/activity_profile_edit_name_TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorWhite"
@@ -134,7 +133,7 @@
                             android:textSize="20sp" />
 
                         <TextView
-                            android:id="@+id/tv_edit_phone_number"
+                            android:id="@+id/activity_profile_edit_phone_number_TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorWhite"
@@ -158,7 +157,7 @@
                             android:textSize="20sp" />
 
                         <TextView
-                            android:id="@+id/tv_edit_email"
+                            android:id="@+id/activity_profile_edit_email_TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorWhite"
@@ -198,7 +197,7 @@
                             android:layout_gravity="center" />
 
                         <TextView
-                            android:id="@+id/tv_edit_blood_info"
+                            android:id="@+id/activity_profile_edit_blood_info_TextView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1.6"
@@ -226,7 +225,7 @@
                             android:textSize="20sp" />
 
                         <TextView
-                            android:id="@+id/tv_edit_blood_group"
+                            android:id="@+id/activity_profile_edit_blood_group_TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorWhite"
@@ -250,7 +249,7 @@
                             android:textSize="20sp" />
 
                         <TextView
-                            android:id="@+id/tv_edit_times_donated"
+                            android:id="@+id/activity_profile_edit_times_donated_TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorWhite"
@@ -274,7 +273,7 @@
                             android:textSize="20sp" />
 
                         <TextView
-                            android:id="@+id/tv_edit_last_donated"
+                            android:id="@+id/activity_profile_edit_last_donated_TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorWhite"
@@ -314,7 +313,7 @@
                             android:layout_gravity="center" />
 
                         <TextView
-                            android:id="@+id/tv_edit_other_info"
+                            android:id="@+id/activity_profile_edit_other_info_TextView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1.6"
@@ -342,7 +341,7 @@
                             android:textSize="20sp" />
 
                         <TextView
-                            android:id="@+id/tv_edit_birth_date"
+                            android:id="@+id/activity_profile_edit_birth_date_TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorWhite"
@@ -366,7 +365,7 @@
                             android:textSize="20sp" />
 
                         <TextView
-                            android:id="@+id/tv_edit_gender"
+                            android:id="@+id/activity_profile_edit_gender_TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorWhite"
@@ -390,7 +389,7 @@
                             android:textSize="20sp" />
 
                         <TextView
-                            android:id="@+id/tv_edit_home_district"
+                            android:id="@+id/activity_profile_edit_home_district_TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorWhite"
@@ -414,7 +413,7 @@
                             android:textSize="20sp" />
 
                         <TextView
-                            android:id="@+id/tv_edit_occupation"
+                            android:id="@+id/activity_profile_edit_occupation_TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorWhite"
@@ -433,7 +432,7 @@
                         android:layout_marginHorizontal="20dp" />
 
                     <TextView
-                        android:id="@+id/tv_edit_institute"
+                        android:id="@+id/activity_profile_edit_institute_TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorWhite"
@@ -452,7 +451,7 @@
                         android:layout_marginHorizontal="20dp" />
 
                     <TextView
-                        android:id="@+id/tv_edit_current_address"
+                        android:id="@+id/activity_profile_edit_current_address_TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorWhite"

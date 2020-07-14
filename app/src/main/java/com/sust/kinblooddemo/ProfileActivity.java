@@ -2,11 +2,12 @@ package com.sust.kinblooddemo;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView fullName, email, phoneNumber, currentAddress, homeDistrict, occupation, institute, donateTimes, birthDate, gender, bloodGroup, lastDonated;
-    private String fullName_, email_, phoneNumber_, password_, currentAddress_, homeDistrict_, occupation_, institute_, donorStatus_, birthDate_, gender_, bloodGroup_, donateTimes_, lastDonated_;
+    private String fullName_, email_, phoneNumber_, currentAddress_, homeDistrict_, occupation_, institute_, donorStatus_, birthDate_, gender_, bloodGroup_, donateTimes_, lastDonated_;
     private SignupHelper signupHelper;
     private RegistrationHelper registrationHelper;
 
@@ -23,29 +24,32 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        Log.d("test", "oncreate");
+        ImageView home = findViewById(R.id.activity_profile_home_ImageView);
+        fullName = findViewById(R.id.activity_profile_edit_name_TextView);
+        email = findViewById(R.id.activity_profile_edit_email_TextView);
+        phoneNumber = findViewById(R.id.activity_profile_edit_phone_number_TextView);
+        currentAddress = findViewById(R.id.activity_profile_edit_current_address_TextView);
+        homeDistrict = findViewById(R.id.activity_profile_edit_home_district_TextView);
+        occupation = findViewById(R.id.activity_profile_edit_occupation_TextView);
+        institute = findViewById(R.id.activity_profile_edit_institute_TextView);
+        donateTimes = findViewById(R.id.activity_profile_edit_times_donated_TextView);
+        birthDate = findViewById(R.id.activity_profile_edit_birth_date_TextView);
+        gender = findViewById(R.id.activity_profile_edit_gender_TextView);
+        bloodGroup = findViewById(R.id.activity_profile_edit_blood_group_TextView);
+        lastDonated = findViewById(R.id.activity_profile_edit_last_donated_TextView);
 
-        fullName = findViewById(R.id.tv_edit_name);
-        email = findViewById(R.id.tv_edit_email);
-        phoneNumber = findViewById(R.id.tv_edit_phone_number);
-        currentAddress = findViewById(R.id.tv_edit_current_address);
-        homeDistrict = findViewById(R.id.tv_edit_home_district);
-        occupation = findViewById(R.id.tv_edit_occupation);
-        institute = findViewById(R.id.tv_edit_institute);
-        donateTimes = findViewById(R.id.tv_edit_times_donated);
-        birthDate = findViewById(R.id.tv_edit_birth_date);
-        gender = findViewById(R.id.tv_edit_gender);
-        bloodGroup = findViewById(R.id.tv_edit_blood_group);
-        lastDonated = findViewById(R.id.tv_edit_last_donated);
-
-
-        TextView editPersonalInfo = findViewById(R.id.tv_edit_personal_info);
-        TextView editBloodInfo = findViewById(R.id.tv_edit_blood_info);
-        TextView editOtherInfo = findViewById(R.id.tv_edit_other_info);
+        TextView editPersonalInfo = findViewById(R.id.activity_profile_edit_personal_info_TextView);
+        TextView editBloodInfo = findViewById(R.id.activity_profile_edit_blood_info_TextView);
+        TextView editOtherInfo = findViewById(R.id.activity_profile_edit_other_info_TextView);
 
         editPersonalInfo.setOnClickListener(this);
         editBloodInfo.setOnClickListener(this);
         editOtherInfo.setOnClickListener(this);
+
+        home.setOnClickListener(view -> {
+            startActivity(new Intent(ProfileActivity.this, HomeActivity.class));
+            finish();
+        });
 
         HomeActivity.DOCUMENT_REFERENCE
                 .get()
@@ -96,13 +100,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.tv_edit_personal_info) {
+        if (v.getId() == R.id.activity_profile_edit_personal_info_TextView) {
             Intent intent = new Intent(ProfileActivity.this, EditPersonalInfo.class);
             intent.putExtra("oldEmail", email_);
             startActivityForResult(intent, 1);
         }
 
-        else if (v.getId() == R.id.tv_edit_blood_info) {
+        else if (v.getId() == R.id.activity_profile_edit_blood_info_TextView) {
             if (donorStatus_.equals("negative")){
                 Toast.makeText(this, "You have to be a donor to edit this field", Toast.LENGTH_SHORT).show();
                 return;
@@ -112,7 +116,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             startActivityForResult(intent, 2);
         }
 
-        else if (v.getId() == R.id.tv_edit_other_info) {
+        else if (v.getId() == R.id.activity_profile_edit_other_info_TextView) {
             if (donorStatus_.equals("negative")){
                 Toast.makeText(this, "You have to be a donor to edit this field", Toast.LENGTH_SHORT).show();
                 return;

@@ -47,12 +47,12 @@ public class LoginActivity extends AppCompatActivity {
             showToastMessage(error_message);
         }
 
-        email = findViewById(R.id.et_loginEmail);
-        password = findViewById(R.id.et_loginPassword);
-        Button login = findViewById(R.id.btn_login);
-        TextView forgotPassword = findViewById(R.id.tv_forgot_password);
+        email = findViewById(R.id.activity_login_email_TextInputEditText);
+        password = findViewById(R.id.activity_login_password_TextInputEditText);
+        Button login = findViewById(R.id.activity_login_login_Button);
+        TextView forgotPassword = findViewById(R.id.activity_login_forgotPassword_TextView);
         firebaseAuth = FirebaseAuth.getInstance();
-        progressBar = findViewById(R.id.progress_login);
+        progressBar = findViewById(R.id.activity_login_ProgressBar);
         progressBar.setVisibility(View.INVISIBLE);
 
         forgotPassword.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, PasswordResetActivity.class)));
@@ -112,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void logintoreg(View view) {
+    public void loginToRegistration(View view) {
         startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
     }
 
