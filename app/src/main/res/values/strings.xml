@@ -1,0 +1,13 @@
+<resources>
+    <string name="edit"><u>Edit</u></string>
+    <string name="app_name">Kin Blood</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_after_notif_map">Map</string>
+    <string name="title_activity_donor_map">Map</string>
+    <string name="dialog_location">Your location data is required to show your current location on map. Again if you want the donor to come to your current location your location data is also required. Your location data is only kept until donation session remains, afterwards this data is removed from database</string>
+    <string name="permanently_denied_location">You have permanently denied location permission. Go to settings to grant permission</string>
+    <!-- Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="password_reset_details">* Please enter the email you registered with. We will send a password reset link to that email. If you cannot remember your email please contact our support team.</string>
+</resources>

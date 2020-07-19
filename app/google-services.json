@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "707881930645",
+    "firebase_url": "https://kin-blood-1bb7a.firebaseio.com",
+    "project_id": "kin-blood-1bb7a",
+    "storage_bucket": "kin-blood-1bb7a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:707881930645:android:3f6917ce4960e85eba309c",
+        "android_client_info": {
+          "package_name": "com.sust.kinblood"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "707881930645-f60pes1gqq4fctq21aoikl3mgpav2gr7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDc_nmcCc_gQpqUU_g8eMiHrPnTNdPfaL8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "707881930645-f60pes1gqq4fctq21aoikl3mgpav2gr7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
