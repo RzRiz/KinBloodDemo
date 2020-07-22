@@ -10,4 +10,6 @@
     <!-- Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="password_reset_details">* Please enter the email you registered with. We will send a password reset link to that email. If you cannot remember your email please contact our support team.</string>
+    <string name="requestStatus_negative">You do not have any request processing</string>
+    <string name="requestStatus_processing">We are working on your request.\nPlease be patient\nIf you do not receive a call within 10 minutes please contact this number: </string>
 </resources>

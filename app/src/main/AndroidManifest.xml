@@ -37,7 +37,6 @@
         <activity
             android:name=".AfterNotifMap"
             android:label="@string/title_activity_after_notif_map" />
-        <activity android:name=".AfterNotifTemp" />
         <activity android:name=".EditOtherInfo" />
         <activity android:name=".EditBloodInfo" />
         <activity android:name=".EditPersonalInfo" />

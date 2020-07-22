@@ -82,7 +82,7 @@ public class NeedDonorActivity extends AppCompatActivity implements OnMapReadyCa
     private String locationName_, locationAddress_, condition_, noOfBags_, blood_group;
     private String[] bloodGroups = {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"};
     private GoogleMap mMap;
-    private LatLng latLng;
+    public static LatLng latLng;
     private TextView locationAddress;
     private FusedLocationProviderClient fusedLocationProviderClient;
 
@@ -217,7 +217,8 @@ public class NeedDonorActivity extends AppCompatActivity implements OnMapReadyCa
                         if (response.body().success != 1) {
                             Toast.makeText(NeedDonorActivity.this, "Failed to send request", Toast.LENGTH_SHORT).show();
                         } else {
-                            startActivity(new Intent(NeedDonorActivity.this, AfterNotifTemp.class));
+                            Intent intent = new Intent(NeedDonorActivity.this, AfterNotifMap.class);
+                            startActivity(intent);
                             finish();
                         }
                     }

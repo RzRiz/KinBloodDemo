@@ -25,6 +25,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.hitomi.cmlibrary.CircleMenu;
@@ -33,6 +35,9 @@ import java.util.Calendar;
 import java.util.Objects;
 
 public class DonorRegistrationActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private DocumentReference DOCUMENT_REFERENCE_COUNTER;
+    private DocumentReference DOCUMENT_REFERENCE_DATA;
 
     private Dialog toastMessageDialog, toastMessageDialog2, toastMessageDialog3;
     private LinearLayout linearLayout;
@@ -73,7 +78,16 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
         Button register = findViewById(R.id.activity_donor_registration_register_Button);
         Button cancelRegistration = findViewById(R.id.activity_donor_registration_cancel_registration_Button);
 
+        FirebaseFirestore DATABASE_REFERENCE = FirebaseFirestore.getInstance();
+        DOCUMENT_REFERENCE_DATA = DATABASE_REFERENCE
+                .collection("Users")
+                .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
+        DOCUMENT_REFERENCE_COUNTER = DATABASE_REFERENCE
+                .collection("Counters")
+                .document("Total");
+
         String donorStatus = getIntent().getStringExtra("donorStatus");
+        String bloodGroup_ = getIntent().getStringExtra("bloodGroup");
 
         if (donorStatus != null) {
             if (donorStatus.equals("positive")) {
@@ -106,14 +120,29 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
                     selectedBloodGroup.setText(blood_group);
                 });
 
-        cancelRegistration.setOnClickListener(view -> {
-            //Write the code for registration cancellation works here
-            //
-            //
-            scrollView.setVisibility(View.VISIBLE);
-            linearLayout.setVisibility(View.GONE);
-            showOopsMessage();
-        });
+        cancelRegistration.setOnClickListener(view ->
+                DOCUMENT_REFERENCE_DATA.update("currentAddress", FieldValue.delete(),
+                "homeDistrict", FieldValue.delete(),
+                "gender", FieldValue.delete(),
+                "bloodGroup", FieldValue.delete(),
+                "occupation", FieldValue.delete(),
+                "institute", FieldValue.delete(),
+                "donorStatus", "negative",
+                "bDay", FieldValue.delete(),
+                "bMonth", FieldValue.delete(),
+                "bYear", FieldValue.delete(),
+                "donateTimes", 0,
+                "dDay", FieldValue.delete(),
+                "dMonth", FieldValue.delete(),
+                "dYear", FieldValue.delete())
+                .addOnSuccessListener(aVoid ->
+                        DOCUMENT_REFERENCE_COUNTER.update(bloodGroup_, FieldValue.increment(-1), "allTotal", FieldValue.increment(-1))
+                        .addOnSuccessListener(aVoid1 -> {
+                            scrollView.setVisibility(View.VISIBLE);
+                            linearLayout.setVisibility(View.GONE);
+                            showOopsMessage();
+                        }).addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show()))
+                .addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show()));
         birthDay.setOnClickListener(this);
         lastDonated.setOnClickListener(this);
         register.setOnClickListener(this);
@@ -235,10 +264,12 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
                 RegistrationHelper registrationHelper = new RegistrationHelper(currentAddress_, homeDistrict_, gender_
                         , blood_group, occupation_, institute_, "positive", bDay, bMonth
                         , bYear, dTimes, dDay, dMonth, dYear);
-                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                FirebaseFirestore.getInstance().collection("Users")
-                        .document(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid())
-                        .set(registrationHelper, SetOptions.merge()).addOnSuccessListener(aVoid -> showCongratulationsMessage()).addOnFailureListener(e -> Toast.makeText(DonorRegistrationActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+                DOCUMENT_REFERENCE_DATA
+                        .set(registrationHelper, SetOptions.merge())
+                        .addOnSuccessListener(aVoid -> DOCUMENT_REFERENCE_COUNTER.update(blood_group, FieldValue.increment(1), "allTotal", FieldValue.increment(1))
+                                .addOnSuccessListener(aVoid1 -> showCongratulationsMessage())
+                                .addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show()))
+                        .addOnFailureListener(e -> Toast.makeText(DonorRegistrationActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
             } else {
                 showToastMessage("No Internet Connection!");
             }
@@ -261,7 +292,10 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
 
         TextView continueButton = toastMessageDialog2.findViewById(R.id.btn_continue);
 
-        continueButton.setOnClickListener(view -> finish());
+        continueButton.setOnClickListener(view -> {
+            toastMessageDialog2.dismiss();
+            finish();
+        });
 
         toastMessageDialog2.show();
         Objects.requireNonNull(toastMessageDialog2.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -273,7 +307,10 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
 
         TextView continueButton = toastMessageDialog3.findViewById(R.id.btn_continue2);
 
-        continueButton.setOnClickListener(view -> finish());
+        continueButton.setOnClickListener(view -> {
+            toastMessageDialog3.dismiss();
+            finish();
+        });
 
         toastMessageDialog3.show();
         Objects.requireNonNull(toastMessageDialog3.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

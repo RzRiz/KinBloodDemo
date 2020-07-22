@@ -3,9 +3,11 @@ package com.sust.kinblood;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -14,6 +16,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,6 +34,10 @@ public class HomeActivity extends AppCompatActivity {
     public static DocumentReference DOCUMENT_REFERENCE;
 
     private DrawerLayout drawerLayout;
+    private TextView apt, bpt, abpt, opt, ant, bnt, abnt, ont, allTotal, apa, bpa, abpa, opa, ana, bna, abna, ona, allAvailable;
+    private DocumentReference counterTotalDoc, counterAvailableDoc;
+    private FirebaseFirestore databaseReference;
+    private String bloodGroup_;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -39,7 +47,29 @@ public class HomeActivity extends AppCompatActivity {
 
         FIREBASE_AUTH = FirebaseAuth.getInstance();
         FIREBASE_USER = FIREBASE_AUTH.getCurrentUser();
-        DOCUMENT_REFERENCE = FirebaseFirestore.getInstance().collection("Users").document(FIREBASE_USER.getUid());
+        databaseReference = FirebaseFirestore.getInstance();
+        DOCUMENT_REFERENCE = databaseReference.collection("Users").document(FIREBASE_USER.getUid());
+        counterTotalDoc = databaseReference.collection("Counters").document("Total");
+        counterAvailableDoc = databaseReference.collection("Counters").document("Available");
+
+        apt = findViewById(R.id.activity_home_ap_donor_TextView);
+        bpt = findViewById(R.id.activity_home_bp_donor_TextView);
+        abpt = findViewById(R.id.activity_home_abp_donor_TextView);
+        opt = findViewById(R.id.activity_home_op_donor_TextView);
+        ant = findViewById(R.id.activity_home_an_donor_TextView);
+        bnt = findViewById(R.id.activity_home_bn_donor_TextView);
+        abnt = findViewById(R.id.activity_home_abn_donor_TextView);
+        ont = findViewById(R.id.activity_home_on_donor_TextView);
+        allTotal = findViewById(R.id.activity_home_total_donor_TextView);
+        apa = findViewById(R.id.activity_home_ap_available_donor_TextView);
+        bpa = findViewById(R.id.activity_home_bp_available_donor_TextView);
+        abpa = findViewById(R.id.activity_home_abp_available_donor_TextView);
+        opa = findViewById(R.id.activity_home_op_available_donor_TextView);
+        ana = findViewById(R.id.activity_home_an_available_donor_TextView);
+        bna = findViewById(R.id.activity_home_bn_available_donor_TextView);
+        abna = findViewById(R.id.activity_home_abn_available_donor_TextView);
+        ona = findViewById(R.id.activity_home_on_available_donor_TextView);
+        allAvailable = findViewById(R.id.activity_home_available_donor_TextView);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.activity_home_nav_view);
@@ -65,16 +95,39 @@ public class HomeActivity extends AppCompatActivity {
         TextView rate = findViewById(R.id.activity_home_rate_TextView);
         TextView logOut = findViewById(R.id.activity_home_log_out_TextView);
 
-        DOCUMENT_REFERENCE.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document != null && document.exists()){
-                    name.setText(Objects.requireNonNull(document.get("fullName")).toString());
-                    email.setText(Objects.requireNonNull(document.get("email")).toString());
-
+        DOCUMENT_REFERENCE.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()){
+                name.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("fullName")));
+                email.setText(Objects.requireNonNull(documentSnapshot.get("email")).toString());
+                if (String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("donorStatus")).equals("positive")){
+                    bloodGroup_ = Objects.requireNonNull(documentSnapshot.get("bloodGroup")).toString();
                 }
             }
-        });
+        }).addOnFailureListener(e -> Toast.makeText(HomeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+
+        counterTotalDoc.get().addOnSuccessListener(documentSnapshot -> {
+             allTotal.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("allTotal")));
+             apt.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("A+")));
+             bpt.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("B+")));
+             abpt.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("AB+")));
+             opt.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("O+")));
+             ant.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("A-")));
+             bnt.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("B-")));
+             abnt.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("AB-")));
+             ont.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("O-")));
+        }).addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
+
+        counterAvailableDoc.get().addOnSuccessListener(documentSnapshot -> {
+            allAvailable.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("availableTotal")));
+            apa.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("A+")));
+            bpa.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("B+")));
+            abpa.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("AB+")));
+            opa.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("O+")));
+            ana.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("A-")));
+            bna.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("B-")));
+            abna.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("AB-")));
+            ona.setText(String.valueOf(Objects.requireNonNull(documentSnapshot.getData()).get("O-")));
+        }).addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
 
         arrow.setOnClickListener(view -> drawerLayout.closeDrawer(GravityCompat.START));
 
@@ -92,6 +145,7 @@ public class HomeActivity extends AppCompatActivity {
                 if (Objects.equals(documentSnapshot.getString("donorStatus"), "negative")) {
                     intent.putExtra("donorStatus", "negative");
                 } else {
+                    intent.putExtra("bloodGroup", bloodGroup_);
                     intent.putExtra("donorStatus", "positive");
                 }
                 startActivity(intent);
@@ -100,7 +154,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         request.setOnClickListener(view -> {
-            startActivity(new Intent(HomeActivity.this, AfterNotifTemp.class));
+            startActivity(new Intent(HomeActivity.this, AfterNotifMap.class));
             drawerLayout.closeDrawer(GravityCompat.START);
         });
 

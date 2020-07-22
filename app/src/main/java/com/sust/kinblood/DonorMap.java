@@ -21,7 +21,7 @@ public class DonorMap extends FragmentActivity implements OnMapReadyCallback {
         setContentView(R.layout.activity_donor_map);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.map_donor);
         mapFragment.getMapAsync(this);
     }
 
