@@ -24,7 +24,7 @@ public class Decision extends AppCompatActivity {
             finish();
         });
         buttonNegative.setOnClickListener(v -> {
-            startActivity(new Intent(Decision.this, HomeActivity.class));
+            startActivity(new Intent(Decision.this, MainActivity.class));
             finish();
         });
     }
@@ -33,7 +33,7 @@ public class Decision extends AppCompatActivity {
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(Decision.this);
         builder.setTitle("Information").setMessage("We would really appreciate your decision.\nDo you want to continue without it?").setPositiveButton("Yes", (dialog, which) -> {
-            startActivity(new Intent(Decision.this, HomeActivity.class));
+            startActivity(new Intent(Decision.this, MainActivity.class));
             finish();
         }).setNegativeButton("No", (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();

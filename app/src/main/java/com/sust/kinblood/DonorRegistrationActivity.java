@@ -106,7 +106,7 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
             linearLayout.setVisibility(View.GONE);
         }
 
-        home.setOnClickListener(view -> startActivity(new Intent(DonorRegistrationActivity.this, HomeActivity.class)));
+        home.setOnClickListener(view -> startActivity(new Intent(DonorRegistrationActivity.this, MainActivity.class)));
 
         circleMenu.setMainMenu(Color.parseColor("#EEF4DC"), R.drawable.ic_blood, R.drawable.ic_app_logo_40dp)
                 .addSubMenu(Color.parseColor("#D32F2F"), R.drawable.a_positive)

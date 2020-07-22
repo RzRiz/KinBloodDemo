@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_bloodInfo">
+
+    <fragment
+        android:id="@+id/navigation_bloodInfo"
+        android:name="com.sust.kinblood.ui.BloodInfoFragment"
+        android:label="@string/title_bloodInfo"
+        tools:layout="@layout/fragment_blood_info" />
+
+    <fragment
+        android:id="@+id/navigation_requestStatus"
+        android:name="com.sust.kinblood.ui.RequestStatusFragment"
+        android:label="@string/title_requestStatus"
+        tools:layout="@layout/fragment_request_status" />
+</navigation>

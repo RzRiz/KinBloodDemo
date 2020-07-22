@@ -6,16 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".AfterNotifMap">
+    tools:context="ui.RequestStatusFragment">
 
-    <fragment
-        android:id="@+id/map_user"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_request_status_map_Fragment"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="400dp" />
 
     <TextView
-        android:id="@+id/tv_request_status"
+        android:id="@+id/fragment_request_status_requestStatus_TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="50sp"/>

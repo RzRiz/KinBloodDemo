@@ -43,7 +43,7 @@ public class EditBloodInfo extends AppCompatActivity implements View.OnClickList
         lastDonated = findViewById(R.id.activity_edit_blood_info_lastDonatedBlood_Button);
         Button updateDonationInfo = findViewById(R.id.activity_edit_blood_info_update_Button);
 
-        home.setOnClickListener(view -> startActivity(new Intent(EditBloodInfo.this, HomeActivity.class)));
+        home.setOnClickListener(view -> startActivity(new Intent(EditBloodInfo.this, MainActivity.class)));
 
         updateDonationInfo.setOnClickListener(this);
         lastDonated.setOnClickListener(this);
@@ -82,7 +82,7 @@ public class EditBloodInfo extends AppCompatActivity implements View.OnClickList
             } else {
                 if (checkId == R.id.activity_edit_blood_info_donateNegative_RadioButton){
                     DonationInfoHelper donationInfoHelper = new DonationInfoHelper(0, 0, 0, 0);
-                    HomeActivity.DOCUMENT_REFERENCE
+                    MainActivity.DOCUMENT_REFERENCE
                             .set(donationInfoHelper, SetOptions.merge())
                             .addOnSuccessListener(aVoid -> Toast.makeText(EditBloodInfo.this, "Donation information update successful", Toast.LENGTH_SHORT).show())
                             .addOnFailureListener(e -> Toast.makeText(EditBloodInfo.this, e.getMessage(), Toast.LENGTH_LONG).show());
@@ -103,7 +103,7 @@ public class EditBloodInfo extends AppCompatActivity implements View.OnClickList
                     else {
                         int timesdonated = Integer.parseInt(timesDonated_);
                         DonationInfoHelper donationInfoHelper = new DonationInfoHelper(dDay, dMonth, dYear, timesdonated);
-                        HomeActivity.DOCUMENT_REFERENCE
+                        MainActivity.DOCUMENT_REFERENCE
                                 .set(donationInfoHelper, SetOptions.merge()).addOnSuccessListener(aVoid -> {
                             Toast.makeText(EditBloodInfo.this, "Donation information update successful", Toast.LENGTH_SHORT).show();
                             date = dDay + " / " + dMonth + " / " + dYear;

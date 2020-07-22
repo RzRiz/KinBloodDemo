@@ -39,7 +39,7 @@ public class EditOtherInfo extends AppCompatActivity implements View.OnClickList
         Button updateCurrentAddress = findViewById(R.id.activity_edit_other_info_updateCurrentAddress_Button);
         Button updateHomeDistrict = findViewById(R.id.activity_edit_other_info_updateHomeDistrict_Button);
 
-        home.setOnClickListener(view -> startActivity(new Intent(EditOtherInfo.this, HomeActivity.class)));
+        home.setOnClickListener(view -> startActivity(new Intent(EditOtherInfo.this, MainActivity.class)));
 
         updateCurrentAddress.setOnClickListener(this);
         updateOccupation.setOnClickListener(this);
@@ -58,7 +58,7 @@ public class EditOtherInfo extends AppCompatActivity implements View.OnClickList
             else {
                 Map<String, Object> occupation = new HashMap<>();
                 occupation.put("occupation", occupation_);
-                HomeActivity.DOCUMENT_REFERENCE
+                MainActivity.DOCUMENT_REFERENCE
                         .update(occupation).addOnSuccessListener(aVoid -> {
                     Toast.makeText(EditOtherInfo.this, "Occupation update successful", Toast.LENGTH_SHORT).show();
                     data.add(0, occupation_);
@@ -74,7 +74,7 @@ public class EditOtherInfo extends AppCompatActivity implements View.OnClickList
             else {
                 Map<String, Object> institute = new HashMap<>();
                 institute.put("institute", institute_);
-                HomeActivity.DOCUMENT_REFERENCE
+                MainActivity.DOCUMENT_REFERENCE
                         .update(institute).addOnSuccessListener(aVoid -> {
                     Toast.makeText(EditOtherInfo.this, "Institute update successful", Toast.LENGTH_LONG).show();
                     data.add(1, institute_);
@@ -90,7 +90,7 @@ public class EditOtherInfo extends AppCompatActivity implements View.OnClickList
             else {
                 Map<String, Object> address = new HashMap<>();
                 address.put("address", currentAddress_);
-                HomeActivity.DOCUMENT_REFERENCE
+                MainActivity.DOCUMENT_REFERENCE
                         .update(address).addOnSuccessListener(aVoid -> {
                     Toast.makeText(EditOtherInfo.this, "Current address update successful", Toast.LENGTH_LONG).show();
                     data.add(2, currentAddress_);
@@ -106,9 +106,9 @@ public class EditOtherInfo extends AppCompatActivity implements View.OnClickList
             else {
                 Map<String, Object> homeDistrict = new HashMap<>();
                 homeDistrict.put("homeDistrict", homeDistrict_);
-                HomeActivity.DOCUMENT_REFERENCE
+                MainActivity.DOCUMENT_REFERENCE
                         .update(homeDistrict).addOnSuccessListener(aVoid -> {
-                    Toast.makeText(EditOtherInfo.this, "HomeActivity district update successful", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditOtherInfo.this, "MainActivity district update successful", Toast.LENGTH_LONG).show();
                     data.add(3, homeDistrict_);
                 }).addOnFailureListener(e -> Toast.makeText(EditOtherInfo.this, e.getMessage(), Toast.LENGTH_LONG).show());
             }

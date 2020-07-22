@@ -12,4 +12,7 @@
     <string name="password_reset_details">* Please enter the email you registered with. We will send a password reset link to that email. If you cannot remember your email please contact our support team.</string>
     <string name="requestStatus_negative">You do not have any request processing</string>
     <string name="requestStatus_processing">We are working on your request.\nPlease be patient\nIf you do not receive a call within 10 minutes please contact this number: </string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_requestStatus">Request Status</string>
+    <string name="title_bloodInfo">Blood Info</string>
 </resources>

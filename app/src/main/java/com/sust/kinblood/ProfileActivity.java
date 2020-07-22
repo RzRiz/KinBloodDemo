@@ -48,11 +48,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         editOtherInfo.setOnClickListener(this);
 
         home.setOnClickListener(view -> {
-            startActivity(new Intent(ProfileActivity.this, HomeActivity.class));
+            startActivity(new Intent(ProfileActivity.this, MainActivity.class));
             finish();
         });
 
-        HomeActivity.DOCUMENT_REFERENCE
+        MainActivity.DOCUMENT_REFERENCE
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     donorStatus_ = documentSnapshot.getString("donorStatus");

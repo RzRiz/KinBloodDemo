@@ -24,7 +24,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             if (isOnline()){
                 if (firebaseAuth.getCurrentUser() != null) {
-                    Intent intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 } else {

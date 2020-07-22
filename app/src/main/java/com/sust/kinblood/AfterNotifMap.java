@@ -49,7 +49,7 @@ public class AfterNotifMap extends FragmentActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
 
-        HomeActivity.DOCUMENT_REFERENCE.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        MainActivity.DOCUMENT_REFERENCE.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 requestStatus_ = documentSnapshot.getString("requestStatus");
@@ -108,8 +108,9 @@ public class AfterNotifMap extends FragmentActivity implements OnMapReadyCallbac
 
     @Override
     public void onTaskDone(Object... values) {
-        if(polyline != null)
+        if(polyline != null) {
             polyline.remove();
             polyline = mMap.addPolyline((PolylineOptions) values[0]);
+        }
     }
 }

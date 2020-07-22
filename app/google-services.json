@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "707881930645-c9luhsfelf2b743kvinrmo7ca22vva3s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sust.kinblood",
+            "certificate_hash": "93f99a6ce71133807c4a75b278f6ad17091a8070"
+          }
+        },
+        {
+          "client_id": "707881930645-qlvjn00juvjh9rvo5o3rvfmavmtjb4bs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sust.kinblood",
+            "certificate_hash": "340b15de1bd5a5fbeee868356fed79764ee78484"
+          }
+        },
+        {
           "client_id": "707881930645-f60pes1gqq4fctq21aoikl3mgpav2gr7.apps.googleusercontent.com",
           "client_type": 3
         }
