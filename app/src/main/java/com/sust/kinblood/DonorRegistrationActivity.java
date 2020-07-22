@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -45,6 +46,7 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
     private RadioGroup radioGroupGender, radioGroupDonatedBefore;
     private EditText currentAddress, homeDistrict, occupation, institute, donateTimes;
     private Button birthDay, lastDonated;
+    private ProgressBar progressBar;
     private String currentAddress_, homeDistrict_, occupation_, institute_, blood_group, gender_;
     private DatePickerDialog.OnDateSetListener dateSetListenerb, dateSetListenerd;
     private Calendar calendar = Calendar.getInstance();
@@ -74,6 +76,8 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
         donateTimes = findViewById(R.id.activity_donor_registration_donateTimes_EditText);
         birthDay = findViewById(R.id.activity_donor_registration_birthDay_Button);
         lastDonated = findViewById(R.id.activity_donor_registration_lastDonatedBlood_Button);
+        progressBar = findViewById(R.id.activity_donor_registration_ProgressBar);
+        progressBar.setVisibility(View.INVISIBLE);
         TextView selectedBloodGroup = findViewById(R.id.activity_donor_registration_selectedBlood_TextView);
         Button register = findViewById(R.id.activity_donor_registration_register_Button);
         Button cancelRegistration = findViewById(R.id.activity_donor_registration_cancel_registration_Button);
@@ -121,34 +125,41 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
                 });
 
         cancelRegistration.setOnClickListener(view -> {
-            DOCUMENT_REFERENCE_DATA.update("currentAddress", FieldValue.delete(),
-                    "homeDistrict", FieldValue.delete(),
-                    "gender", FieldValue.delete(),
-                    "bloodGroup", FieldValue.delete(),
-                    "occupation", FieldValue.delete(),
-                    "institute", FieldValue.delete(),
-                    "donorStatus", "negative",
-                    "bDay", FieldValue.delete(),
-                    "bMonth", FieldValue.delete(),
-                    "bYear", FieldValue.delete(),
-                    "donateTimes", 0,
-                    "dDay", FieldValue.delete(),
-                    "dMonth", FieldValue.delete(),
-                    "dYear", FieldValue.delete())
-                    .addOnSuccessListener(aVoid -> {
-                        if (bloodGroup_ != null) {
-                            DOCUMENT_REFERENCE_COUNTER.update(bloodGroup_, FieldValue.increment(-1), "allTotal", FieldValue.increment(-1))
-                                    .addOnSuccessListener(aVoid1 -> {
-                                        scrollView.setVisibility(View.VISIBLE);
-                                        linearLayout.setVisibility(View.GONE);
-                                        showOopsMessage();
-                                    }).addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
-                        }
-                    }).addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
+            progressBar.setVisibility(View.VISIBLE);
+            if (isOnline()) {
+                DOCUMENT_REFERENCE_DATA.update("currentAddress", FieldValue.delete(),
+                        "homeDistrict", FieldValue.delete(),
+                        "gender", FieldValue.delete(),
+                        "bloodGroup", FieldValue.delete(),
+                        "occupation", FieldValue.delete(),
+                        "institute", FieldValue.delete(),
+                        "donorStatus", "negative",
+                        "bDay", FieldValue.delete(),
+                        "bMonth", FieldValue.delete(),
+                        "bYear", FieldValue.delete(),
+                        "donateTimes", 0,
+                        "dDay", FieldValue.delete(),
+                        "dMonth", FieldValue.delete(),
+                        "dYear", FieldValue.delete())
+                        .addOnSuccessListener(aVoid -> {
+                            if (bloodGroup_ != null) {
+                                DOCUMENT_REFERENCE_COUNTER.update(bloodGroup_, FieldValue.increment(-1), "allTotal", FieldValue.increment(-1))
+                                        .addOnSuccessListener(aVoid1 -> {
+                                            scrollView.setVisibility(View.VISIBLE);
+                                            linearLayout.setVisibility(View.GONE);
+                                            showOopsMessage();
+                                        }).addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
+                            }
+                        }).addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
 
-            scrollView.setVisibility(View.VISIBLE);
-            linearLayout.setVisibility(View.GONE);
-            showOopsMessage();
+                progressBar.setVisibility(View.INVISIBLE);
+                showOopsMessage();
+                scrollView.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.GONE);
+            } else {
+                progressBar.setVisibility(View.INVISIBLE);
+                showToastMessage("No Internet Connection!");
+            }
         });
         birthDay.setOnClickListener(this);
         lastDonated.setOnClickListener(this);
@@ -264,21 +275,25 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
             dDay = dayOfMonth;
         };
         if (v.getId() == R.id.activity_donor_registration_register_Button) {
-            if (isOnline()) {
-                if (!getData()) {
-                    return;
+            if (getData()) {
+                progressBar.setVisibility(View.VISIBLE);
+                if (isOnline()) {
+                    RegistrationHelper registrationHelper = new RegistrationHelper(currentAddress_, homeDistrict_, gender_
+                            , blood_group, occupation_, institute_, "positive", bDay, bMonth
+                            , bYear, dTimes, dDay, dMonth, dYear);
+                    DOCUMENT_REFERENCE_DATA
+                            .set(registrationHelper, SetOptions.merge())
+                            .addOnSuccessListener(aVoid -> DOCUMENT_REFERENCE_COUNTER.update(blood_group, FieldValue.increment(1), "allTotal", FieldValue.increment(1))
+                                    .addOnSuccessListener(aVoid1 -> {
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                        showCongratulationsMessage();
+                                    })
+                                    .addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show()))
+                            .addOnFailureListener(e -> Toast.makeText(DonorRegistrationActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+                } else {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    showToastMessage("No Internet Connection!");
                 }
-                RegistrationHelper registrationHelper = new RegistrationHelper(currentAddress_, homeDistrict_, gender_
-                        , blood_group, occupation_, institute_, "positive", bDay, bMonth
-                        , bYear, dTimes, dDay, dMonth, dYear);
-                DOCUMENT_REFERENCE_DATA
-                        .set(registrationHelper, SetOptions.merge())
-                        .addOnSuccessListener(aVoid -> DOCUMENT_REFERENCE_COUNTER.update(blood_group, FieldValue.increment(1), "allTotal", FieldValue.increment(1))
-                                .addOnSuccessListener(aVoid1 -> showCongratulationsMessage())
-                                .addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show()))
-                        .addOnFailureListener(e -> Toast.makeText(DonorRegistrationActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
-            } else {
-                showToastMessage("No Internet Connection!");
             }
         }
     }
