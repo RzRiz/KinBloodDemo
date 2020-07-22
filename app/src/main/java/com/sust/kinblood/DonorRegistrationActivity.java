@@ -120,29 +120,36 @@ public class DonorRegistrationActivity extends AppCompatActivity implements View
                     selectedBloodGroup.setText(blood_group);
                 });
 
-        cancelRegistration.setOnClickListener(view ->
-                DOCUMENT_REFERENCE_DATA.update("currentAddress", FieldValue.delete(),
-                "homeDistrict", FieldValue.delete(),
-                "gender", FieldValue.delete(),
-                "bloodGroup", FieldValue.delete(),
-                "occupation", FieldValue.delete(),
-                "institute", FieldValue.delete(),
-                "donorStatus", "negative",
-                "bDay", FieldValue.delete(),
-                "bMonth", FieldValue.delete(),
-                "bYear", FieldValue.delete(),
-                "donateTimes", 0,
-                "dDay", FieldValue.delete(),
-                "dMonth", FieldValue.delete(),
-                "dYear", FieldValue.delete())
-                .addOnSuccessListener(aVoid ->
-                        DOCUMENT_REFERENCE_COUNTER.update(bloodGroup_, FieldValue.increment(-1), "allTotal", FieldValue.increment(-1))
-                        .addOnSuccessListener(aVoid1 -> {
-                            scrollView.setVisibility(View.VISIBLE);
-                            linearLayout.setVisibility(View.GONE);
-                            showOopsMessage();
-                        }).addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show()))
-                .addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show()));
+        cancelRegistration.setOnClickListener(view -> {
+            DOCUMENT_REFERENCE_DATA.update("currentAddress", FieldValue.delete(),
+                    "homeDistrict", FieldValue.delete(),
+                    "gender", FieldValue.delete(),
+                    "bloodGroup", FieldValue.delete(),
+                    "occupation", FieldValue.delete(),
+                    "institute", FieldValue.delete(),
+                    "donorStatus", "negative",
+                    "bDay", FieldValue.delete(),
+                    "bMonth", FieldValue.delete(),
+                    "bYear", FieldValue.delete(),
+                    "donateTimes", 0,
+                    "dDay", FieldValue.delete(),
+                    "dMonth", FieldValue.delete(),
+                    "dYear", FieldValue.delete())
+                    .addOnSuccessListener(aVoid -> {
+                        if (bloodGroup_ != null) {
+                            DOCUMENT_REFERENCE_COUNTER.update(bloodGroup_, FieldValue.increment(-1), "allTotal", FieldValue.increment(-1))
+                                    .addOnSuccessListener(aVoid1 -> {
+                                        scrollView.setVisibility(View.VISIBLE);
+                                        linearLayout.setVisibility(View.GONE);
+                                        showOopsMessage();
+                                    }).addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
+                        }
+                    }).addOnFailureListener(e -> Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show());
+
+            scrollView.setVisibility(View.VISIBLE);
+            linearLayout.setVisibility(View.GONE);
+            showOopsMessage();
+        });
         birthDay.setOnClickListener(this);
         lastDonated.setOnClickListener(this);
         register.setOnClickListener(this);
